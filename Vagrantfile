@@ -11,16 +11,8 @@ Vagrant.configure("2") do |config|
   # please see the online documentation at vagrantup.com.
   config.omnibus.chef_version = :latest
 
-  # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "opscode-ubuntu-12.04-i386"
-
-  # The url from where the 'config.vm.box' box will be fetched if it
-  # doesn't already exist on the user's system.
   config.vm.box_url = "https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04-i386_provisionerless.box"
-
-  # This can be set to the host name you wish the guest machine to have. Vagrant
-  # will automatically execute the configuration necessary to make this happen.
-  config.vm.hostname = "japgil-starter"
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -30,6 +22,7 @@ Vagrant.configure("2") do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
+  config.vm.network "private_network", type: "dhcp"
   # config.vm.network :private_network, ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
@@ -62,15 +55,25 @@ Vagrant.configure("2") do |config|
   # path, and data_bags path (all relative to this Vagrantfile), and adding
   # some recipes and/or roles.
   #
-  config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = "chef/cookbooks"
-    chef.roles_path = "roles"
-    chef.data_bags_path = "data_bags"
-    # chef.add_recipe "mysql"
-    chef.add_role "server"
-  #
-  #   # You may also specify custom JSON attributes:
-  #   chef.json = { :mysql_password => "foo" }
+
+  config.vm.define "web" do |web|
+    web.vm.hostname = "webserver"
+    web.vm.provision :chef_solo do |chef|
+      chef.cookbooks_path = "chef/cookbooks"
+      chef.roles_path = "roles"
+      chef.data_bags_path = "data_bags"
+      chef.add_role "server"
+    end
+  end
+
+  config.vm.define "db" do |db|
+    db.vm.hostname = "database"
+    db.vm.provision :chef_solo do |chef|
+      chef.cookbooks_path = "chef/cookbooks"
+      chef.roles_path = "roles"
+      chef.data_bags_path = "data_bags"
+      chef.add_role "database"
+    end
   end
 
 

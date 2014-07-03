@@ -1,0 +1,7 @@
+source "http://api.berkshelf.com"
+
+metadata
+
+cookbook "runit"
+cookbook "mysql"
+cookbook "redis"
