@@ -3,6 +3,8 @@
 .vagrant
 .ruby-*
 
+chef
+
 # Ruby
 .rake_test_cache
 .rvmrc
