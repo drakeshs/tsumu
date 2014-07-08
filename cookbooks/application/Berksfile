@@ -1,0 +1,8 @@
+source "http://api.berkshelf.com"
+
+metadata
+
+
+cookbook 'nginx'
+cookbook 'system'
+cookbook 'rbenv', github: 'RiotGames/rbenv-cookbook'

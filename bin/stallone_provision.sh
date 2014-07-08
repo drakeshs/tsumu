@@ -1,7 +1,8 @@
 #! /bin/bash
-vagrant destroy
 rm -fR chef/cookbooks
-cd cookbooks/system
+cd cookbooks/application
+berks update
 berks vendor ../../chef/cookbooks
 cd ../..
-vagrant up web
+vagrant provision web
+vagrant ssh web

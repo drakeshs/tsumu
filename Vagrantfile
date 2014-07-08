@@ -11,8 +11,8 @@ Vagrant.configure("2") do |config|
   # please see the online documentation at vagrantup.com.
   config.omnibus.chef_version = :latest
 
-  config.vm.box = "opscode-ubuntu-12.04-i386"
-  config.vm.box_url = "https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04-i386_provisionerless.box"
+  config.vm.box = "opscode_ubuntu-13.10"
+  config.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-13.10_chef-provisionerless.box"
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -58,10 +58,15 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "web" do |web|
     web.vm.hostname = "webserver"
-    web.vm.provision :chef_solo do |chef|
-      chef.cookbooks_path = "chef/cookbooks"
-      chef.roles_path = "roles"
-      chef.data_bags_path = "data_bags"
+    web.vm.provision :chef_client do |chef|
+      chef.chef_server_url = "https://api.opscode.com/organizations/qwinixchef"
+      chef.validation_client_name = "qwinixchef-validator"
+      chef.validation_key_path = ".chef/qwinixchef-validator.pem"
+      chef.encrypted_data_bag_secret_key_path = "#{ENV['HOME']}/Workserver/stallone/.chef/encrypted_data_bag_secret"
+
+      # chef.cookbooks_path = "chef/cookbooks"
+      # chef.roles_path = "roles"
+      # chef.data_bags_path = "data_bags"
       chef.add_role "server"
     end
   end
@@ -73,6 +78,7 @@ Vagrant.configure("2") do |config|
       chef.roles_path = "roles"
       chef.data_bags_path = "data_bags"
       chef.add_role "database"
+      chef.encrypted_data_bag_secret_key_path = "#{ENV['HOME']}/Workserver/stallone/.chef/encrypted_data_bag_secret"
     end
   end
 

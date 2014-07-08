@@ -54,3 +54,6 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+
+keys
+data_bags/users/*
