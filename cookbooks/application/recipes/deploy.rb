@@ -23,7 +23,7 @@ end
 #   memory << user_info["ssh"]["public"]
 # end
 
-ssh_keys = [Chef::EncryptedDataBagItem.load("users", "josetonyp")["ssh"]["pub"]]
+ssh_keys = [Chef::EncryptedDataBagItem.load("users", "josetonyp")["ssh"]["public"]]
 
 template "/var/www/application/.ssh/authorized_keys" do
   source "authorized_keys.erb"
@@ -38,7 +38,7 @@ template "/var/www/application/.ssh/id_rsa" do
   owner "deploy"
   group "deploy"
   mode "0600"
-  variables :content => Chef::EncryptedDataBagItem.load( "users", "github" )["ssh"]["key"]
+  variables :content => Chef::EncryptedDataBagItem.load( "users", "github" )["ssh"]["key"].join("\n")
 end
 
 template "/var/www/application/.ssh/id_rsa.pub" do
