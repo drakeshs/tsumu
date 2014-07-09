@@ -1,22 +1,35 @@
-
-directory "/var/www/application" do
-  owner "deploy"
-  group "deploy"
-  mode "2775"
-  recursive true
-end
-
 user "deploy" do
   shell "/bin/bash"
   home "/var/www/application"
 end
 
-directory "/var/www/application/.ssh" do
+directory "/var/www" do
   owner "root"
   group "root"
   mode "2755"
   recursive true
 end
+
+[
+  "/var/www/application",
+  "/var/www/application/.ssh",
+  "/var/www/application/shared",
+  "/var/www/application/shared/config",
+  "/var/www/application/shared/config/unicorn",
+  "/var/www/application/log",
+  "/var/www/application/log/nginx"
+].each do |directory_name|
+  directory  directory_name do
+    owner "deploy"
+    group "deploy"
+    mode "2775"
+    recursive true
+  end
+end
+
+
+
+
 
 # ssh_keys = data_bag('users').inject([]) do |memory, user|
 #   user_info = data_bag_item( "users", user )
@@ -49,13 +62,6 @@ template "/var/www/application/.ssh/id_rsa.pub" do
   variables :content => Chef::EncryptedDataBagItem.load( "users", "github" )["ssh"]["public"]
 end
 
-directory "/var/www/application/shared/config/unicorn" do
-  owner "deploy"
-  group "deploy"
-  mode "2775"
-  recursive true
-end
-
 unless File.exists?("/var/www/application/shared/config/database.yml")
   template "/var/www/application/shared/config/database.yml" do
     source "database.yml.erb"
@@ -72,12 +78,5 @@ template "/var/www/application/shared/config/unicorn/config.rb" do
   group "deploy"
   mode "0755"
   variables :directory => "/var/www/application/current"
-end
-
-directory "/var/www/application/log/nginx" do
-  owner "deploy"
-  group "deploy"
-  mode "2775"
-  recursive true
 end
 
