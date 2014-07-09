@@ -8,8 +8,8 @@
 #
 template "/etc/environment" do
   source "text.erb"
-  owner "deploy"
-  group "deploy"
+  owner "root"
+  group "root"
   mode "0755"
   variables content: "LC_ALL=en_US.UTF-8\nLANG=en_US.UTF-8\n"
 end
