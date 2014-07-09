@@ -62,12 +62,13 @@ Vagrant.configure("2") do |config|
       chef.chef_server_url = "https://api.opscode.com/organizations/qwinixchef"
       chef.validation_client_name = "qwinixchef-validator"
       chef.validation_key_path = ".chef/qwinixchef-validator.pem"
-      chef.encrypted_data_bag_secret_key_path = "#{ENV['HOME']}/Workserver/stallone/.chef/encrypted_data_bag_secret"
+      chef.encrypted_data_bag_secret_key_path = "#{ENV['HOME']}/Workserver/sumito/.chef/encrypted_data_bag_secret"
 
       # chef.cookbooks_path = "chef/cookbooks"
       # chef.roles_path = "roles"
       # chef.data_bags_path = "data_bags"
       chef.add_role "server"
+      chef.environment = "staging"
     end
   end
 
@@ -78,7 +79,7 @@ Vagrant.configure("2") do |config|
       chef.roles_path = "roles"
       chef.data_bags_path = "data_bags"
       chef.add_role "database"
-      chef.encrypted_data_bag_secret_key_path = "#{ENV['HOME']}/Workserver/stallone/.chef/encrypted_data_bag_secret"
+      chef.encrypted_data_bag_secret_key_path = "#{ENV['HOME']}/Workserver/sumito/.chef/encrypted_data_bag_secret"
     end
   end
 

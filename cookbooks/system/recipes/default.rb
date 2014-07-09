@@ -6,6 +6,13 @@
 #
 # All rights reserved - Do Not Redistribute
 #
+template "/etc/environment" do
+  source "text.erb"
+  owner "deploy"
+  group "deploy"
+  mode "0755"
+  variables content: "LC_ALL=en_US.UTF-8\nLANG=en_US.UTF-8\n"
+end
 
 include_recipe "apt"
 
@@ -33,3 +40,8 @@ package 'telnet'
 package 'pv'
 package 'screen'
 package 'git-core'
+package 'seek'
+
+
+
+
