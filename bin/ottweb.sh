@@ -1,8 +1,9 @@
 #! /bin/bash
-vagrant destroy
+vagrant destroy -f ottweb
 rm -fR chef/cookbooks
-cd cookbooks/system
+cd cookbooks/application
 berks update
 berks vendor ../../chef/cookbooks
 cd ../..
-vagrant up web
+vagrant up ottweb
+vagrant ssh ottweb

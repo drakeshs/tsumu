@@ -4,5 +4,5 @@ cd cookbooks/application
 berks update
 berks vendor ../../chef/cookbooks
 cd ../..
-vagrant provision web
-vagrant ssh web
+vagrant provision stallone
+vagrant ssh stallone

@@ -1,0 +1,15 @@
+#! /bin/bash
+cd cookbooks/ubuntu
+berks install
+berks update
+berks upload
+cd ../..
+cd cookbooks/application
+berks install
+berks update
+berks upload
+cd ../..
+cd cookbooks/database
+berks install
+berks update
+berks upload

@@ -4,5 +4,5 @@ metadata
 
 
 cookbook 'nginx'
-cookbook 'ubuntu'
+cookbook 'ubuntu', path: '../ubuntu'
 cookbook 'rbenv', github: 'RiotGames/rbenv-cookbook'
