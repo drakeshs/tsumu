@@ -1,8 +1,3 @@
-user "deploy" do
-  shell "/bin/bash"
-  home "/var/www/application"
-end
-
 directory "/var/www" do
   owner "root"
   group "root"
@@ -27,40 +22,6 @@ end
   end
 end
 
-
-
-
-
-# ssh_keys = data_bag('users').inject([]) do |memory, user|
-#   user_info = data_bag_item( "users", user )
-#   memory << user_info["ssh"]["public"]
-# end
-
-ssh_keys = [Chef::EncryptedDataBagItem.load("users", "josetonyp")["ssh"]["public"]]
-
-template "/var/www/application/.ssh/authorized_keys" do
-  source "authorized_keys.erb"
-  owner "deploy"
-  group "deploy"
-  mode "0600"
-  variables :ssh_keys => ssh_keys
-end
-
-template "/var/www/application/.ssh/id_rsa" do
-  source "text.erb"
-  owner "deploy"
-  group "deploy"
-  mode "0600"
-  variables :content => Chef::EncryptedDataBagItem.load( "users", "github" )["ssh"]["key"].join("\n")
-end
-
-template "/var/www/application/.ssh/id_rsa.pub" do
-  source "text.erb"
-  owner "deploy"
-  group "deploy"
-  mode "0755"
-  variables :content => Chef::EncryptedDataBagItem.load( "users", "github" )["ssh"]["public"]
-end
 
 unless File.exists?("/var/www/application/shared/config/database.yml")
   template "/var/www/application/shared/config/database.yml" do

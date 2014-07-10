@@ -1,7 +1,7 @@
 # Chef
 .chef/*.pem
 .chef/encrypted_data_bag_secret
-.chef/kinfe.rb
+.chef/knife.rb
 .vagrant
 .ruby-*
 
@@ -58,4 +58,5 @@ Desktop.ini
 $RECYCLE.BIN/
 
 keys/*.pem
+keys/id_rsa*
 data_bags/users/*

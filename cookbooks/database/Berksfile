@@ -5,4 +5,3 @@ metadata
 cookbook "runit"
 cookbook "mysql"
 cookbook "redis"
-cookbook 'system', path: '../system'

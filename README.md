@@ -1,8 +1,53 @@
-The chef-repo
+Sumito
 ===============
-All installations require a central workspace known as the chef-repo. This is a place where primitive objects--cookbooks, roles, environments, data bags, and chef-repo configuration files--are stored and managed.
 
-The chef-repo should be kept under version control, such as [git](http://git-scm.org), and then managed as if it were source code.
+Sumito is a cluster environment creator based in chef and deployed to [AWS](http://aws.amazon.com).
+
+Chef recipes include 3 basic recipies to deploy a cluster under given 2 chef environments.
+
+
+Project Configuration
+-------------------
+
+##### Chef folder
+-------------------
+In order to deploy the recipes to real server we are using a hosted chef server un opscode. This configuration could change from project to proyect. This project are only hosting the recipes, policies and roles that holds the creation of the servers.
+
+Follow the convention to create the .chef folder with knife configuration [manually](http://docs.opscode.com/install_workstation.html#create-chef-directory) or use the one that is downloable from the hosted chef server. Every organization in chef hosted server has it's own dowloable chef sandbox.
+
+###### Chef Encryption Key
+
+All data bags that contains user keys are encrypted with a key. You will need to ask to a collegue for such key. Other wise you need to generate another key and re encrypt all data bags again and upload them to chef server.
+
+[Encrypt a Data Bag Item](http://docs.opscode.com/chef/essentials_data_bags.html#encrypt-a-data-bag-item)
+
+
+##### Keys Folder
+-------------------
+
+This folder will hold the keys for accessing to running application instances and will need to be provided from someone from the team once the application is already deployed.
+
+You can expect to have one key per environment deployed with the patter in the name:
+
+dish-env-(env name).pem
+
+
+
+##### Berkshelf
+-------------------
+Is used to manage every recipe, please read documentation [Berkshelf](http://berkshelf.com/)
+
+
+
+##### Vagrant
+-------------------
+
+There is a Vagrant file to instanciate the development environment for testing the recipes. It works under Chef Solo and Chef Client and tries to replicate the finaly deployment infraestructure.
+
+OttWeb
+
+Stallone <=> (DB(Mysql) && Cache(Redis))
+
 
 Knife Configuration
 -------------------
@@ -16,16 +61,39 @@ More information about knife.rb configuration options can be found in [the docum
 
 Cookbooks
 ---------
-A cookbook is the fundamental unit of configuration and policy distribution. A sample cookbook can be found in `cookbooks/starter`. After making changes to any cookbook, you must upload it to the Chef server using knife:
 
-    $ knife upload cookbooks/starter
+Cookbooks:
+- System: Install basic server update for ubuntu
+- Application: Install a basic ruby unicorn nginx application
+- Database: Install mysql and redis
 
-For more information about cookbooks, see the example files in the `starter` cookbook.
+
+A cookbook is the fundamental unit of configuration and policy distribution.
+Cookbooks are managed by [Berkshelf](http://berkshelf.com/) and uploaded to the chef server directly.
+
+Environments
+-----
+
+Chef environments are different from RoR environments but are following the same convention so an Chef staging env should install an application under RoR environment.
+
 
 Roles
 -----
 Roles provide logical grouping of cookbooks and other roles. A sample role can be found at `roles/starter.rb`.
 
+There is basic roles for every application in the cluster:
+- ottweb
+- stallone
+- database
+
 Getting Started
 -------------------------
 Now that you have the chef-repo ready to go, check out [Learn Chef](https://learnchef.opscode.com/quickstart/workstation-setup/) to proceed with your workstation setup. If you have any questions about Chef you can always ask [our support team](https://www.opscode.com/support/tickets/new) for a helping hand.
+
+
+Maintenance
+-------------------------
+
+This project was created by:
+
+Jose Antonio Pio Gil japgil@qwinixtech.com

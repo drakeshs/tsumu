@@ -18,11 +18,11 @@ Vagrant.configure("2") do |config|
   # within the machine from a port on the host machine. In the example below,
   # port 8080 on the virtual machine is forwarded to port 9090 on the host.
   # This will allow the virtual machine to communicate of the common proxy port 8080.
-  config.vm.network :forwarded_port, guest: 8080, host: 9090
+  # config.vm.network :forwarded_port, guest: 8080, host: 9090
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.network "private_network", type: "dhcp"
+  # config.vm.network "private_network", type: "dhcp"
   # config.vm.network :private_network, ip: "192.168.33.10"
 
   # Create a public network, which generally matched to bridged network.
@@ -56,6 +56,22 @@ Vagrant.configure("2") do |config|
   # some recipes and/or roles.
   #
 
+  ##########################################################################
+  ## Local development instances with Chef Client under staging environment
+  ##########################################################################
+
+  config.vm.define "ottweb" do |ottweb|
+    ottweb.vm.hostname = "ottweb"
+    ottweb.vm.provision :chef_client do |chef|
+      chef.chef_server_url = "https://api.opscode.com/organizations/qwinixchef"
+      chef.validation_client_name = "qwinixchef-validator"
+      chef.validation_key_path = ".chef/qwinixchef-validator.pem"
+      chef.encrypted_data_bag_secret_key_path = "#{ENV['HOME']}/Workserver/sumito/.chef/encrypted_data_bag_secret"
+      chef.add_role "ottweb"
+      chef.environment = "staging"
+    end
+  end
+
   config.vm.define "web" do |web|
     web.vm.hostname = "webserver"
     web.vm.provision :chef_client do |chef|
@@ -63,17 +79,46 @@ Vagrant.configure("2") do |config|
       chef.validation_client_name = "qwinixchef-validator"
       chef.validation_key_path = ".chef/qwinixchef-validator.pem"
       chef.encrypted_data_bag_secret_key_path = "#{ENV['HOME']}/Workserver/sumito/.chef/encrypted_data_bag_secret"
-
-      # chef.cookbooks_path = "chef/cookbooks"
-      # chef.roles_path = "roles"
-      # chef.data_bags_path = "data_bags"
-      chef.add_role "server"
+      chef.add_role "stallone"
       chef.environment = "staging"
+    end
+  end
+
+  ##########################################################################
+  ## Local development instances with Chef Solo
+  ##########################################################################
+
+  config.vm.define "ottweb" do |ottweb|
+    ottweb.vm.hostname = "ottweb"
+    ottweb.vm.network "private_network", ip: "172.28.128.2"
+    ottweb.vm.provision :chef_solo do |chef|
+      chef.cookbooks_path = "cookbooks"
+      chef.environments_path = "environments"
+      chef.roles_path = "roles"
+      chef.data_bags_path = "data_bags"
+      chef.add_role "ottweb"
+      chef.environment = "local"
+      chef.encrypted_data_bag_secret_key_path = "#{ENV['HOME']}/Workserver/sumito/.chef/encrypted_data_bag_secret"
+    end
+  end
+
+  config.vm.define "stallone" do |stallone|
+    stallone.vm.hostname = "stallone"
+    stallone.vm.network "private_network", ip: "172.28.128.3"
+    stallone.vm.provision :chef_solo do |chef|
+      chef.cookbooks_path = "cookbooks"
+      chef.environments_path = "environments"
+      chef.roles_path = "roles"
+      chef.data_bags_path = "data_bags"
+      chef.add_role "stallone"
+      chef.environment = "local"
+      chef.encrypted_data_bag_secret_key_path = "#{ENV['HOME']}/Workserver/sumito/.chef/encrypted_data_bag_secret"
     end
   end
 
   config.vm.define "db" do |db|
     db.vm.hostname = "database"
+    db.vm.network "private_network", ip: "172.28.128.4"
     db.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = "chef/cookbooks"
       chef.roles_path = "roles"
@@ -84,12 +129,5 @@ Vagrant.configure("2") do |config|
   end
 
 
-  # Enable provisioning with chef server, specifying the chef server URL,
-  # and the path to the validation key (relative to this Vagrantfile).
-  #
-  # config.vm.provision :chef_client do |chef|
-  #   chef.chef_server_url = "https://api.opscode.com/organizations/qwinixchef"
-  #   chef.validation_client_name = "qwinixchef-validator"
-  #   chef.validation_key_path = ".chef/qwinixchef-validator.pem"
-  # end
+
 end

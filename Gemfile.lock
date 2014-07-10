@@ -95,6 +95,7 @@ GEM
       builder (>= 2.1.2)
     hashie (2.1.2)
     highline (1.6.21)
+    hirb (0.7.2)
     hitimes (1.2.1)
     httpclient (2.4.0)
     httpi (0.9.7)
@@ -225,6 +226,7 @@ DEPENDENCIES
   aws-sdk
   berkshelf
   chef
+  hirb
   knife-ec2
   knife-solo
   knife-solo_data_bag
