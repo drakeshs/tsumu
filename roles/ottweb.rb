@@ -1,3 +1,3 @@
 name "server"
 description "basic server config"
-run_list "recipe[system]", "recipe[application]"
+run_list "recipe[ubuntu]", "recipe[application]"

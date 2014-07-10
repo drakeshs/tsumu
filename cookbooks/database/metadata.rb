@@ -9,3 +9,4 @@ version          '0.1.0'
 depends "mysql"
 depends "database"
 depends "redis"
+depends "ubuntu"

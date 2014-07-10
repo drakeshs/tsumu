@@ -60,8 +60,8 @@ Vagrant.configure("2") do |config|
   ## Local development instances with Chef Client under staging environment
   ##########################################################################
 
-  config.vm.define "ottweb" do |ottweb|
-    ottweb.vm.hostname = "ottweb"
+  config.vm.define "cc_ottweb" do |ottweb|
+    ottweb.vm.hostname = "cc_ottweb"
     ottweb.vm.provision :chef_client do |chef|
       chef.chef_server_url = "https://api.opscode.com/organizations/qwinixchef"
       chef.validation_client_name = "qwinixchef-validator"
@@ -72,8 +72,8 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "web" do |web|
-    web.vm.hostname = "webserver"
+  config.vm.define "cc_stallone" do |web|
+    web.vm.hostname = "cc_stallone"
     web.vm.provision :chef_client do |chef|
       chef.chef_server_url = "https://api.opscode.com/organizations/qwinixchef"
       chef.validation_client_name = "qwinixchef-validator"
