@@ -1,5 +1,7 @@
 # Chef
-.chef
+.chef/*.pem
+.chef/encrypted_data_bag_secret
+.chef/kinfe.rb
 .vagrant
 .ruby-*
 
@@ -55,5 +57,5 @@ ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 
-keys
+keys/*.pem
 data_bags/users/*
