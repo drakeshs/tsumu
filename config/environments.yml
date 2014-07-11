@@ -1,0 +1,20 @@
+development:
+  group: development
+  applications:
+    ottweb:
+      servers: 1
+    stallone:
+      servers: 1
+  mysql: [ "stallone" ]
+  redis: [ "stallone" ]
+staging:
+  group: staging
+  applications:
+    ottweb:
+      servers: 1
+    stallone:
+      servers: 1
+  mysql: [ "stallone" ]
+  redis: [ "stallone" ]
+production:
+  group: production
