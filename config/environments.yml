@@ -14,7 +14,25 @@ staging:
       servers: 1
     stallone:
       servers: 1
-  mysql: [ "stallone" ]
-  redis: [ "stallone" ]
+      database: redis_server
+      cache: mysql_server
+  database:
+    name: mysql-server
+    engine: mysql
+    database: stallone
+    allocated_storage: 5
+    db_instance_class: db.t1.micro
+    master_username: staging
+    master_user_password: stagin1234
+    db_security_groups: [default]
+    port: 3306
+    multi_az: false
+    publicly_accessible: false
+  cache:
+    name: redis-server
+    engine: redis
+    node_type: cache.t1.micro
+    nodes: 1
+    port: 10000
 production:
   group: production

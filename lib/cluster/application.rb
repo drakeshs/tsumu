@@ -54,8 +54,8 @@ module Cluster
     def server_config
       {
         ec2: @ec2,
-        group: Cluster::Group.new( @cluster.environment.group_name, @ec2 ).get,
-        key_pair: Cluster::KeyPair.new( @cluster.environment.group_name, @ec2 ).get,
+        group: @cluster.group,
+        key_pair: @cluster.key_pair,
         application: self
       }
     end
