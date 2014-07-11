@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+# ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
+# load Gem.bin_path('bundler', 'bundle')
+
+require 'aws-sdk'
+require 'pry'
+require 'yaml'
+require 'hirb'
+require 'thor'
+
+PROJECT_ROOT = Pathname.new( __dir__ ).join("..")
+require PROJECT_ROOT.join("lib/cluster.rb")
+
+
+class MyCLI < Thor
+
+  desc "status ENV", "Cluster Status for given environment"
+  def status(environment)
+    cluster = Cluster::Base.new( "staging" )
+    cluster.status
+  end
+
+  desc "install ENV", "Create given cluster environment"
+  def install(environment)
+    cluster = Cluster::Base.new( "staging" )
+    cluster.create
+  end
+
+  desc "bootstrap ENV application server", "Chef bootstrap given server in given environment"
+  def bootstrap(environment, application, server)
+    cluster = Cluster::Base.new( "staging" )
+    cluster.bootstrap(application, server)
+  end
+
+
+end
+
+MyCLI.start(ARGV)
+
+

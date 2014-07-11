@@ -1,15 +1,17 @@
 #! /bin/bash
-cd cookbooks/ubuntu
+cd cookbooks/application --force
 berks install
-berks update
 berks upload
 cd ../..
-cd cookbooks/application
+cd cookbooks/database --force
 berks install
-berks update
 berks upload
+
 cd ../..
-cd cookbooks/database
-berks install
-berks update
-berks upload
+knife role from file roles/ottweb.rb
+knife role from file roles/stallone.rb
+knife role from file roles/database.rb
+
+knife environment from file environments/development.json
+knife environment from file environments/production.json
+knife environment from file environments/staging.json

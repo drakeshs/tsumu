@@ -33,7 +33,7 @@ unless File.exists?("/var/www/application/shared/config/database.yml")
 end
 
 
-template "/var/www/application/shared/config/unicorn/#{node.chef_environment}.rb" do
+template "/var/www/application/shared/config/unicorn/config.rb" do
   source "unicorn_config.erb"
   owner "deploy"
   group "deploy"

@@ -8,5 +8,12 @@ gem "knife-solo"
 gem "knife-vagrant2"
 gem "knife-ec2"
 gem "knife-solo_data_bag"
+
+
+
 gem 'aws-sdk'
 gem 'hirb'
+gem 'rspec'
+gem 'pry'
+gem 'pry-doc'
+gem 'thor'

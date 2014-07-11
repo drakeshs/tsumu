@@ -1,3 +1,3 @@
-name "server"
-description "basic server config"
-run_list "recipe[ubuntu]", "recipe[application]"
+name "ottweb"
+description "Ottweb config"
+run_list "recipe[ubuntu]", "recipe[application]", "recipe[application::mysql]"

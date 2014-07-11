@@ -92,7 +92,7 @@ Vagrant.configure("2") do |config|
     ottweb.vm.hostname = "ottweb"
     ottweb.vm.network "private_network", ip: "172.28.128.2"
     ottweb.vm.provision :chef_solo do |chef|
-      chef.cookbooks_path = "cookbooks"
+      chef.cookbooks_path = "chef/cookbooks"
       chef.environments_path = "environments"
       chef.roles_path = "roles"
       chef.data_bags_path = "data_bags"
@@ -106,7 +106,7 @@ Vagrant.configure("2") do |config|
     stallone.vm.hostname = "stallone"
     stallone.vm.network "private_network", ip: "172.28.128.3"
     stallone.vm.provision :chef_solo do |chef|
-      chef.cookbooks_path = "cookbooks"
+      chef.cookbooks_path = "chef/cookbooks"
       chef.environments_path = "environments"
       chef.roles_path = "roles"
       chef.data_bags_path = "data_bags"
