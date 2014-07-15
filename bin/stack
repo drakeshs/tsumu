@@ -9,27 +9,34 @@ require 'hirb'
 require 'thor'
 
 PROJECT_ROOT = Pathname.new( __dir__ ).join("..")
-require PROJECT_ROOT.join("lib/cluster.rb")
+require PROJECT_ROOT.join("lib/stack.rb")
 
 
 class MyCLI < Thor
 
-  desc "status ENV", "Cluster Status for given environment"
+  desc "status ENV", "Stack Status for given environment"
   def status(environment)
-    cluster = Cluster::Base.new( "staging" )
-    cluster.status
+    stack = Stack::Base.new( "staging" )
+    stack.status
   end
 
-  desc "install ENV", "Create given cluster environment"
+  desc "install ENV", "Create given stack environment"
   def install(environment)
-    cluster = Cluster::Base.new( "staging" )
-    cluster.create
+    stack = Stack::Base.new( "staging" )
+    stack.create
+  end
+
+  desc "destroy ENV", "Destroy given stack environment"
+  def destroy(environment)
+    stack = Stack::Base.new( "staging" )
+    stack.destroy
+    stack.status
   end
 
   desc "bootstrap ENV application server", "Chef bootstrap given server in given environment"
   def bootstrap(environment, application, server)
-    cluster = Cluster::Base.new( "staging" )
-    cluster.bootstrap(application, server)
+    stack = Stack::Base.new( "staging" )
+    stack.bootstrap(application, server)
   end
 
 

@@ -1,13 +1,13 @@
 module Cluster
   class Application
 
-    attr_accessor :ec2, :cluster, :config, :name
+    attr_accessor :config, :name, :stack
 
     def initialize( args = {} )
       @name = args.fetch(:name, nil)
-      @ec2 = args.fetch(:ec2, nil)
+      @provider = args.fetch(:provider, nil)
       @config = args.fetch(:config, {})
-      @cluster = args.fetch(:cluster, {})
+      @stack = args.fetch(:stack, {})
     end
 
     def servers
@@ -16,46 +16,32 @@ module Cluster
       end
     end
 
-    def servers_status
-      servers.map do |server|
-        if server.exists?
-          { name: server.name,
-            status: server.get.status ,
-            ip: server.get.public_ip_address ,
-            private_ip_address: server.get.private_ip_address,
-            dns: server.get.dns_name,
-            architecture: server.get.architecture,
-          }
-        else
-          { name: server.name,
-            status: :none,
-            ip: :none,
-            private_ip_address: :none,
-            dns: :none,
-            architecture: :none
-          }
-        end
-      end
-    end
-
-
-    def install
+    def create
       servers.each do |server|
         server.create
       end
     end
 
-    def bootstrap(server)
-      Cluster::Server.new( {name: server}.merge(server_config) ).bootstrap
+    def destroy
+      servers.each do |server|
+        server.destroy
+      end
     end
+
+    def bootstrap(server)
+      server(name).bootstrap
+    end
+
+    def servers_status
+      servers.map &:status
+    end
+
 
     private
 
     def server_config
       {
-        ec2: @ec2,
-        group: @cluster.group,
-        key_pair: @cluster.key_pair,
+        provider: @provider,
         application: self
       }
     end

@@ -3,22 +3,32 @@ module Cluster
 
     attr_accessor :name
 
-    def initialize( name, ec2 )
+    def initialize( name, provider )
       @name = name
-      @ec2 = ec2
+      @provider = provider
     end
 
     def exists?
-      @ec2.security_groups.any?{|g| g.name == @name}
+      !get.nil?
     end
 
     def get
-      unless exists?
-        group = ec2.security_groups.create(@name)
-        group.authorize_ingress(:tcp, 22, "0.0.0.0/0")
-        group.authorize_ingress(:http, 80, "0.0.0.0/0")
-      end
-      @ec2.security_groups[@name]
+      @provider.security_groups.get(@name)
     end
+
+    def create
+      unless exists?
+        group = @provider.security_groups.create( name: @name, description: @name )
+        group.authorize_port_range( 22..22, ip_protocol: :tcp )
+        group.authorize_port_range( 80..80, ip_protocol: :tcp )
+      end
+      get
+    end
+
+
+    def destroy
+      get.destroy
+    end
+
   end
 end

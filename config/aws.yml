@@ -1,0 +1,11 @@
+development:
+  access_key_id: AKIAJPPGBVN72RZ4LB5A
+  secret_access_key: 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
+
+staging:
+  access_key_id: AKIAJPPGBVN72RZ4LB5A
+  secret_access_key: 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
+
+production:
+  access_key_id: AKIAJPPGBVN72RZ4LB5A
+  secret_access_key: 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

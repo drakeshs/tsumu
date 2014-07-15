@@ -12,8 +12,10 @@ staging:
   applications:
     ottweb:
       servers: 1
+      flavor: t1.micro
     stallone:
       servers: 1
+      flavor: t1.micro
       database: redis_server
       cache: mysql_server
   database:

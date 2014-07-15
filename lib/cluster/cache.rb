@@ -5,8 +5,8 @@ module Cluster
 
     def initialize( args = {} )
       @config = args.fetch( :config, nil)
-      @cluster = args.fetch( :cluster, nil)
-      @provider = @cluster.cache
+      @stack = args.fetch( :stack, nil)
+      @provider = args.fetch( :provider, nil)
     end
 
     def exists?
@@ -33,7 +33,7 @@ module Cluster
 
     def create
       unless exists?
-        puts "Creating Cache #{@config["name"]} in #{@config["engine"]} for #{@cluster.environment.name}"
+        puts "Creating Cache #{@config["name"]} in #{@config["engine"]} for #{@stack.environment.name}"
         security_group
         @provider.client.create_cache_cluster({
                   cache_cluster_id: @config["name"],
@@ -44,7 +44,7 @@ module Cluster
                   cache_security_group_names: [@config["name"]]
                 })
       else
-        puts "Cache #{@config["name"]} in #{@config["engine"]} for #{@cluster.environment.name} already exists"
+        puts "Cache #{@config["name"]} in #{@config["engine"]} for #{@stack.environment.name} already exists"
       end
     end
 
@@ -54,9 +54,14 @@ module Cluster
       rescue
         @provider.client.create_cache_security_group({
           cache_security_group_name: @config["name"],
-          description: "Security group #{@config["name"]} for #{@cluster.environment.name}"
+          description: "Security group #{@config["name"]} for #{@stack.environment.name}"
           })
       end
+    end
+
+
+    def status
+      pry
     end
 
   end

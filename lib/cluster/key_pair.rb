@@ -1,22 +1,36 @@
 module Cluster
   class KeyPair
-    def initialize( name, ec2 )
+    def initialize( name, provider )
       @name = name
-      @ec2 = ec2
+      @provider = provider
     end
 
     def exists?
-      @ec2.key_pairs[@name].exists?
+      !@provider.key_pairs.get(@name).nil?
     end
 
     def get
-      unless @ec2.key_pairs[@name].exists?
-        key_pair = @ec2.key_pairs.create(@name)
+      @provider.key_pairs.get(@name)
+    end
+
+    def create
+      unless exists?
+        key_pair = @provider.key_pairs.create( name: @name )
         File.open(PROJECT_ROOT.join("keys/#{@name}.pem"), "w") do |file|
           file << key_pair.private_key
         end
       end
-      @ec2.key_pairs[@name]
+      get
+    end
+
+
+    def destroy
+      get.destroy
+      File.delete(PROJECT_ROOT.join("keys/#{@name}.pem"))
+    end
+
+    def status
+
     end
   end
 end

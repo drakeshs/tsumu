@@ -4,51 +4,81 @@ module Cluster
 
     def initialize( args={} )
       @name = args.fetch(:name, "")
-      @ec2 = args.fetch(:ec2, "")
-      @group = args.fetch(:group, nil)
-      @status = ""
-      @key_pair = args.fetch(:key_pair, nil)
+      @provider = args.fetch(:provider, "")
       @application = args.fetch(:application, nil)
     end
 
     def get
-      @server ||= @ec2.instances.with_tag("name", @name).with_tag("group", @group.id ).select{|server| server.status != :terminated}.first
+      @provider.servers.all({ "tag:name" => @name, "tag:group" => @application.stack.group.get.name }).select{ |server| ["pending", "running"].include?(server.state) }.first
     end
 
     def exists?
-      @ec2.instances.with_tag("name", @name).with_tag("group", @group.id ).any?{|server| server.status != :terminated}
+      return false if @application.stack.group.get.nil?
+      @provider.servers.all({ "tag:name" => @name, "tag:group" => @application.stack.group.get.name }).any?{ |server| ["pending", "running"].include?(server.state) }
     end
 
     def create
       unless exists?
-        puts "Creating instance #{@name} "
-        instance = image.run_instance(:key_pair => @key_pair,
-                                      :security_groups => @group)
-        puts "Launching #{@name} #{instance.id}, status: #{instance.status}"
-        while instance.status == :pending
+        puts "Creating server #{@name} "
+        server = @provider.servers.create({
+          flavor_id: @application.config["flavor"],
+          image_id: image_id,
+          groups: [@application.stack.group.get.name],
+          key_name: @application.stack.key_pair.get.name,
+          tags: { name: @name, group: @application.stack.group.get.name  }
+          })
+        puts "Launching #{@name} #{server.id}, status: #{server.state}"
+        while server.state == :pending
           puts "."
           sleep 10
         end
-        puts "Launched instance #{instance.id}, status: #{instance.status}"
-        instance.tag("name", value: @name)
-        instance.tag("group", value: @group.id)
+        puts "Launched server #{server.id}, status: #{server.state}"
+      else
+        puts "Server #{get.id} is already running"
       end
     end
 
-    def delete
-
+    def destroy
+      get.destroy if exists?
     end
 
     def status
-
+      if exists?
+        server = get
+        { application: @application.name,
+          id: server.id,
+          name: server.tags["name"],
+          status: server.state ,
+          ip: server.public_ip_address ,
+          private_ip_address: server.private_ip_address,
+          dns: server.dns_name,
+          # architecture: server.architecture,
+          # flavor: server.flavor,
+          # key_name: server.key_name,
+          groups: server.groups.join(", ")
+        }
+      else
+        { application: @application.name,
+          id: :none,
+          name: :none,
+          status: :none,
+          ip: :none,
+          private_ip_address: :none,
+          dns: :none,
+          # architecture: :none,
+          # flavor: :none,
+          # key_name: :none,
+          groups: :none
+        }
+      end
     end
 
     def bootstrap
-      system "knife bootstrap #{get.public_ip_address} -x ubuntu -i keys/#{@group.id}.pem -r 'role[#{@application.name}]' --secret-file .chef/encrypted_data_bag_secret --sudo -E #{@application.cluster.environment.name}"
+      system "knife bootstrap #{get.public_ip_address} -x ubuntu -i keys/#{@application.stack.group.get.name}.pem -r 'role[#{@application.name}]' --secret-file .chef/encrypted_data_bag_secret --sudo -E #{@application.stack.environment.name}"
     end
 
-    def image
-      Cluster::ServerImage.new("ami-018c9568", @ec2).get
+    def image_id
+      "ami-018c9568"
     end
 
   end
