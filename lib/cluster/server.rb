@@ -74,6 +74,7 @@ module Cluster
     end
 
     def bootstrap
+      binding.pry
       system "knife bootstrap #{get.public_ip_address} -x ubuntu -i keys/#{@application.stack.group.get.name}.pem -r 'role[#{@application.name}]' --secret-file .chef/encrypted_data_bag_secret --sudo -E #{@application.stack.environment.name}"
     end
 

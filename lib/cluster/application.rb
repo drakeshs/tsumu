@@ -29,7 +29,7 @@ module Cluster
     end
 
     def bootstrap(server)
-      server(name).bootstrap
+      server(server).bootstrap
     end
 
     def servers_status

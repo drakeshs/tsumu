@@ -9,59 +9,69 @@ module Cluster
       @provider = args.fetch( :provider, nil)
     end
 
-    def exists?
-      begin
-        @provider.client.describe_cache_clusters({
-          cache_cluster_id: @config["name"],
-          show_cache_node_info: true
-          })
-      rescue
-        false
-      end
+    def get
+      @provider.clusters.get(@config["name"])
     end
 
-    def get
-      begin
-        @provider.client.describe_cache_clusters({
-          cache_cluster_id: @config["name"],
-          show_cache_node_info: true
-          })
-      rescue
-        {}
-      end
+    def exists?
+      !@provider.clusters.get(@config["name"]).nil?
     end
 
     def create
-      unless exists?
+      if !exists? && !@stack.group.get.nil?
         puts "Creating Cache #{@config["name"]} in #{@config["engine"]} for #{@stack.environment.name}"
-        security_group
-        @provider.client.create_cache_cluster({
-                  cache_cluster_id: @config["name"],
-                  num_cache_nodes: @config["nodes"],
-                  cache_node_type: @config["node_type"],
-                  engine: @config["engine"],
-                  port: @config["port"],
-                  cache_security_group_names: [@config["name"]]
-                })
+        unless group
+          create_group
+          authorize_group
+        end
+        @provider.clusters.create({
+          id: @config["name"],
+          nodes: @config["nodes"],
+          node_type: @config["node_type"],
+          engine: @config["engine"],
+          port: @config["port"],
+          security_groups: [group.id]
+        })
       else
         puts "Cache #{@config["name"]} in #{@config["engine"]} for #{@stack.environment.name} already exists"
       end
     end
 
-    def security_group
-      begin
-        @provider.client.describe_cache_security_groups( cache_security_group_name: @config["name"] )
-      rescue
-        @provider.client.create_cache_security_group({
-          cache_security_group_name: @config["name"],
-          description: "Security group #{@config["name"]} for #{@stack.environment.name}"
-          })
+    def group
+      @provider.security_groups.get( @stack.group.name )
+    end
+
+    def create_group
+      unless group
+        @provider.security_groups.create( id: @stack.group.name, description: @stack.group.name )
       end
     end
 
+    def destroy
+      if get && ["available", "failed", "incompatible-parameters", "incompatible-network", "restore-failed"].include?(get.status)
+        get.destroy
+        group.destroy
+      end
+      rescue
+    end
+
+    def authorize_group
+      group.authorize_ec2_group( @stack.group.name )
+    end
 
     def status
-      pry
+      if exists?
+        server = get
+        {
+          id: server.id,
+          status: server.status
+        }
+      else
+        {
+          id: :none,
+          status: :none
+        }
+      end
     end
 
   end

@@ -26,6 +26,8 @@ module Stack
         )
       p "Database Server for '#{@environment.name}' "
       table( [database.status], :unicode => true )
+      p "Cache Server for '#{@environment.name}' "
+      table( [cache.status], :unicode => true )
       p "Servers Applications for '#{@environment.name}' "
       table( applications.map(&:servers_status).flatten, fields: [:application,:name,:id,:status,:ip,:private_ip_address,:dns,:groups ], :unicode => true )
     end
@@ -34,7 +36,7 @@ module Stack
       group.create
       key_pair.create
       database.create
-      # cache.create
+      cache.create
       applications.each do |app|
         app.create
       end
@@ -45,7 +47,7 @@ module Stack
         app.destroy
       end
       database.destroy
-      # cache.destroy
+      cache.destroy
       group.destroy if group.get
       key_pair.destroy if key_pair.get
     end
@@ -55,6 +57,10 @@ module Stack
       @environment.config["applications"].map do |name, config|
         get_application(name)
       end
+    end
+
+    def bootstrap(application_name, server)
+      get_application(application_name).bootstrap(server)
     end
 
     def group

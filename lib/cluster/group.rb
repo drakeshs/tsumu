@@ -27,7 +27,7 @@ module Cluster
 
 
     def destroy
-      get.destroy
+      get.destroy if exists?
     end
 
   end

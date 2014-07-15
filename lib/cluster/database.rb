@@ -24,9 +24,10 @@ module Cluster
     def create
       if !exists? && !@stack.group.get.nil?
         puts  "Creating DB #{@config["name"]} for #{@stack.environment.name}"
-        create_group
-        authorize_group
-        binding.pry
+        unless group
+          create_group
+          authorize_group
+        end
         @provider.servers.create({
           id: @config["name"],
           db_name: @config["database"],
@@ -37,7 +38,8 @@ module Cluster
           password: @config["master_user_password"],
           port: @config["port"],
           multi_az: @config["multi_az"],
-          publicly_accessible: @config["publicly_accessible"]
+          publicly_accessible: @config["publicly_accessible"],
+          security_groups: [group.id]
         })
         get
       else
