@@ -6,6 +6,7 @@ module Cluster
       @name = args.fetch(:name, "")
       @provider = args.fetch(:provider, "")
       @application = args.fetch(:application, nil)
+      @groups =  [ @application.stack.group.get.name ]
     end
 
     def get
@@ -22,8 +23,8 @@ module Cluster
         puts "Creating server #{@name} "
         server = @provider.servers.create({
           flavor_id: @application.config["flavor"],
-          image_id: image_id,
-          groups: [@application.stack.group.get.name],
+          image_id: @application.config["image_id"],
+          groups: @groups,
           key_name: @application.stack.key_pair.get.name,
           tags: { name: @name, group: @application.stack.group.get.name  }
           })
@@ -74,12 +75,11 @@ module Cluster
     end
 
     def bootstrap
-      binding.pry
       system "knife bootstrap #{get.public_ip_address} -x ubuntu -i keys/#{@application.stack.group.get.name}.pem -r 'role[#{@application.name}]' --secret-file .chef/encrypted_data_bag_secret --sudo -E #{@application.stack.environment.name}"
     end
 
-    def image_id
-      "ami-018c9568"
+    def add_group( group_name )
+      @groups << group_name
     end
 
   end

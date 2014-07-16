@@ -22,7 +22,7 @@ module Cluster
     end
 
     def create
-      if !exists? && !@stack.group.get.nil?
+      if !exists? && !@stack.db_group.get.nil?
         puts  "Creating DB #{@config["name"]} for #{@stack.environment.name}"
         unless group
           create_group
@@ -39,7 +39,7 @@ module Cluster
           port: @config["port"],
           multi_az: @config["multi_az"],
           publicly_accessible: @config["publicly_accessible"],
-          security_groups: [group.id]
+          security_group_names: [group.id]
         })
         get
       else
@@ -52,18 +52,19 @@ module Cluster
       get.destroy if get(true) && get.state != "deleting"
     end
 
+    # Use DB gruop name
     def group
-      @provider.security_groups.get( @stack.group.name )
+      @provider.security_groups.get( @stack.db_group.name )
     end
 
     def create_group
       unless group
-        @provider.security_groups.create( id: @stack.group.name, description: @stack.group.name )
+        @provider.security_groups.create( id: @stack.db_group.name, description: @stack.db_group.name )
       end
     end
 
     def authorize_group
-      group.authorize_ec2_security_group( @stack.group.name )
+      group.authorize_ec2_security_group( @stack.db_group.name )
     end
 
     def status

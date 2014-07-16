@@ -3,9 +3,10 @@ module Cluster
 
     attr_accessor :name
 
-    def initialize( name, provider )
+    def initialize( name, provider, ports=[22] )
       @name = name
       @provider = provider
+      @ports = ports
     end
 
     def exists?
@@ -19,8 +20,11 @@ module Cluster
     def create
       unless exists?
         group = @provider.security_groups.create( name: @name, description: @name )
-        group.authorize_port_range( 22..22, ip_protocol: :tcp )
-        group.authorize_port_range( 80..80, ip_protocol: :tcp )
+
+        @ports.each do |port|
+          group.authorize_port_range( port..port, ip_protocol: :tcp )
+        end
+
       end
       get
     end

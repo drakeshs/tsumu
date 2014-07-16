@@ -19,6 +19,7 @@ module Cluster
         File.open(PROJECT_ROOT.join("keys/#{@name}.pem"), "w") do |file|
           file << key_pair.private_key
         end
+        File.chmod(0644, PROJECT_ROOT.join("keys/#{@name}.pem"))
       end
       get
     end

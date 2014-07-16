@@ -27,20 +27,34 @@ module Stack
       p "Database Server for '#{@environment.name}' "
       table( [database.status], :unicode => true )
       p "Cache Server for '#{@environment.name}' "
-      table( [cache.status], :unicode => true )
+      table( cache.status, :unicode => true )
       p "Servers Applications for '#{@environment.name}' "
       table( applications.map(&:servers_status).flatten, fields: [:application,:name,:id,:status,:ip,:private_ip_address,:dns,:groups ], :unicode => true )
     end
 
     def create
-      group.create
-      key_pair.create
+      group.create unless group.exists?
+      db_group.create unless db_group.exists?
+      cache_group.create unless cache_group.exists?
+      key_pair.create unless key_pair.exists?
       database.create
       cache.create
+      applications.inject([]) do |threads,application|
+        threads << Thread.new do
+          application.create
+          sleep(1) while !application.ready?
+        end
+      end.map(&:join)
+      puts "Application created... enjoy"
+    end
+
+    def reinstall
       applications.each do |app|
+        app.destroy
         app.create
       end
     end
+
 
     def destroy
       applications.each do |app|
@@ -48,8 +62,11 @@ module Stack
       end
       database.destroy
       cache.destroy
-      group.destroy if group.get
-      key_pair.destroy if key_pair.get
+      group.destroy if group.exists?
+      db_group.create if db_group.exists?
+      cache_group.create if cache_group.exists?
+      key_pair.destroy if key_pair.exists?
+      puts "Application destroyed... :( come back soon"
     end
 
 
@@ -64,7 +81,15 @@ module Stack
     end
 
     def group
-      @group ||= Cluster::Group.new( @environment.group_name, @provider.compute )
+      @group ||= Cluster::Group.new( @environment.group_name, @provider.compute, [22,80] )
+    end
+
+    def db_group
+      @db_group ||= Cluster::Group.new( @environment.db_group_name, @provider.compute, [3306] )
+    end
+
+    def cache_group
+      @cache_group ||= Cluster::Group.new( @environment.cache_group_name, @provider.compute, [10000] )
     end
 
     def key_pair

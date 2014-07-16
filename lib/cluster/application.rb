@@ -17,15 +17,24 @@ module Cluster
     end
 
     def create
-      servers.each do |server|
-        server.create
-      end
+      puts "Creating servers for application #{@name}"
+      servers.inject([]) do |threads,server|
+        threads << Thread.new do
+          server.add_group( @stack.db_group.get.name ) if config["database"]
+          server.add_group( @stack.cache_group.get.name ) if config["cache"]
+          server.create unless server.exists?
+          sleep(1) while server.status[:status] != "running"
+        end
+      end.map(&:join)
     end
 
     def destroy
-      servers.each do |server|
-        server.destroy
-      end
+      servers.inject([]) do |threads,server|
+        threads << Thread.new do
+          server.destroy
+          sleep(1) while server.status[:status] != :none
+        end
+      end.map(&:join)
     end
 
     def bootstrap(server)
@@ -34,6 +43,10 @@ module Cluster
 
     def servers_status
       servers.map &:status
+    end
+
+    def ready?
+      servers_status.none?{|s| s[:status] != "running" }
     end
 
 

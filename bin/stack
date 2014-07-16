@@ -16,27 +16,61 @@ class MyCLI < Thor
 
   desc "status ENV", "Stack Status for given environment"
   def status(environment)
-    stack = Stack::Base.new( "staging" )
+    stack = Stack::Base.new( environment )
     stack.status
   end
 
   desc "install ENV", "Create given stack environment"
   def install(environment)
-    stack = Stack::Base.new( "staging" )
+    stack = Stack::Base.new( environment )
     stack.create
+  end
+
+  desc "reinstall ENV", "Create given stack environment"
+  def reinstall(environment)
+    stack = Stack::Base.new( environment )
+    stack.reinstall
   end
 
   desc "destroy ENV", "Destroy given stack environment"
   def destroy(environment)
-    stack = Stack::Base.new( "staging" )
+    stack = Stack::Base.new( environment )
     stack.destroy
     stack.status
   end
 
   desc "bootstrap ENV application server", "Chef bootstrap given server in given environment"
   def bootstrap(environment, application, server)
-    stack = Stack::Base.new( "staging" )
+    stack = Stack::Base.new( environment )
     stack.bootstrap(application, server)
+  end
+
+  desc "cache ENV action", "Execute actions over cache server \n Actions: [ create, destroy, status ]"
+  def cache(environment, action)
+    stack = Stack::Base.new( environment )
+    case action
+      when "create"
+        stack.cache_group.create
+        stack.cache.create
+      when "destroy"
+        stack.cache.destroy
+        stack.cache_group.destroy
+      when "status" then puts stack.cache.status
+    end
+  end
+
+  desc "database ENV action", "Execute actions over database server \n Actions: [ create, destroy, status ]"
+  def database(environment, action)
+    stack = Stack::Base.new( environment )
+    case action
+      when "create"
+        stack.db_group.create
+        stack.database.create
+      when "destroy"
+        stack.database.destroy
+        stack.db_group.destroy
+      when "status" then puts stack.database.status
+    end
   end
 
 

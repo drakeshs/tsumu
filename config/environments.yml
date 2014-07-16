@@ -13,9 +13,23 @@ staging:
     ottweb:
       servers: 1
       flavor: t1.micro
+      # Ubuntu Server 14.04 LTS (PV), SSD Volume Type :: 64 bit
+      # image_id: "ami-80778be8"
+      # ubuntu/images/ebs-io1/ubuntu-saucy-13.10-amd64-server-20140608
+      image_id: "ami-00894c68"
+      # ubuntu/images/ebs/ubuntu-precise-12.04-amd64-server-20120728 -
+      # image_id: "ami-013f9768"
+
     stallone:
       servers: 1
       flavor: t1.micro
+      # Ubuntu Server 14.04 LTS (PV), SSD Volume Type :: 64 bit
+      # image_id: "ami-80778be8"
+      # ubuntu/images/ebs-io1/ubuntu-saucy-13.10-amd64-server-20140608
+      image_id: "ami-00894c68"
+      # ubuntu/images/ebs/ubuntu-precise-12.04-amd64-server-20120728 -
+      # image_id: "ami-013f9768"
+
       database: redis_server
       cache: mysql_server
   database:
@@ -24,8 +38,8 @@ staging:
     database: stallone
     allocated_storage: 5
     db_instance_class: db.t1.micro
-    master_username: staging
-    master_user_password: stagin1234
+    master_username: "staging"
+    master_user_password: "staging1234"
     db_security_groups: [default]
     port: 3306
     multi_az: false

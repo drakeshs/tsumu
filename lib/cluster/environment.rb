@@ -9,5 +9,13 @@ module Cluster
       @config = YAML::load_file( PROJECT_ROOT.join("config/environments.yml" ))[@name]
     end
 
+    def db_group_name
+      "db_#{@group_name}"
+    end
+
+    def cache_group_name
+      "cache_#{@group_name}"
+    end
+
   end
 end

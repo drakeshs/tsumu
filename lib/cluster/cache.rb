@@ -18,7 +18,7 @@ module Cluster
     end
 
     def create
-      if !exists? && !@stack.group.get.nil?
+      if !exists? && !@stack.cache_group.get.nil?
         puts "Creating Cache #{@config["name"]} in #{@config["engine"]} for #{@stack.environment.name}"
         unless group
           create_group
@@ -38,12 +38,12 @@ module Cluster
     end
 
     def group
-      @provider.security_groups.get( @stack.group.name )
+      @provider.security_groups.get( @stack.cache_group.name )
     end
 
     def create_group
       unless group
-        @provider.security_groups.create( id: @stack.group.name, description: @stack.group.name )
+        @provider.security_groups.create( id: @stack.cache_group.name, description: @stack.cache_group.name )
       end
     end
 
@@ -56,21 +56,31 @@ module Cluster
     end
 
     def authorize_group
-      group.authorize_ec2_group( @stack.group.name )
+      group.authorize_ec2_group( @stack.cache_group.name )
     end
 
     def status
       if exists?
         server = get
-        {
-          id: server.id,
-          status: server.status
-        }
+        server.nodes.map do |node|
+          {
+            id: server.id,
+            status: server.status,
+            node: node["CacheNodeId"],
+            node_status: node["CacheNodeStatus"],
+            port: node["Port"],
+            address: node["Address"]
+          }
+        end
       else
-        {
+        [{
           id: :none,
-          status: :none
-        }
+          status: :none,
+          node: :none,
+          node_status: :none,
+          port: :none,
+          address: :none
+        }]
       end
     end
 
