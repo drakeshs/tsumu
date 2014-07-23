@@ -34,7 +34,10 @@ ssh_keys =  if node.environment == "local"
                 memory << user_info["ssh"]["public"]
               end
             else
-              [Chef::EncryptedDataBagItem.load("users", "josetonyp")["ssh"]["public"]]
+              data_bag('users').inject([]) do |memory, user|
+                user_info = Chef::EncryptedDataBagItem.load( "users", user )
+                memory << user_info["ssh"]["public"]
+              end
             end
 
 
