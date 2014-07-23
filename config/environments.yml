@@ -30,8 +30,8 @@ staging:
       # ubuntu/images/ebs/ubuntu-precise-12.04-amd64-server-20120728 -
       # image_id: "ami-013f9768"
 
-      database: redis_server
-      cache: mysql_server
+      database: mysql-server
+      cache: redis-server
   database:
     name: mysql-server
     engine: mysql

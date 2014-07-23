@@ -113,6 +113,21 @@ Vagrant.configure("2") do |config|
       chef.add_role "stallone"
       chef.environment = "local"
       chef.encrypted_data_bag_secret_key_path = "#{ENV['HOME']}/Workserver/sumito/.chef/encrypted_data_bag_secret"
+      chef.json = {
+          "application" => {
+            "database" => {
+              "host" => "mycase.com",
+              "port" => 3434,
+              "username" => "celinedion",
+              "password" => "celinedion",
+              "database" => "celinedion"
+              }
+            },
+            "cache" => {
+              "host" => "redis_case.com",
+              "port" => 10000
+            }
+          }
     end
   end
 

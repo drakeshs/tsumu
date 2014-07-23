@@ -7,8 +7,3 @@
 # All rights reserved - Do Not Redistribute
 #
 
-include_recipe "application::users"
-include_recipe "application::deploy"
-include_recipe "application::ruby"
-include_recipe "application::nginx"
-include_recipe "application::javascript"

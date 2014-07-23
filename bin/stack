@@ -64,12 +64,23 @@ class MyCLI < Thor
     stack = Stack::Base.new( environment )
     case action
       when "create"
-        stack.db_group.create
+        stack.db_group.create unless stack.db_group.exists?
         stack.database.create
       when "destroy"
         stack.database.destroy
-        stack.db_group.destroy
       when "status" then puts stack.database.status
+    end
+  end
+
+  desc "application ENV application action", "Execute actions on application\n Actions: [ create, destroy, status ]"
+  def application(environment, application, action)
+    stack = Stack::Base.new( environment )
+    case action
+      when "create"
+        stack.get_application(application).create
+      when "destroy"
+        stack.get_application(application).destroy
+      when "status" then puts stack.get_application(application).servers_status
     end
   end
 

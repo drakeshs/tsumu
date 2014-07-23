@@ -40,6 +40,8 @@ package 'telnet'
 package 'pv'
 package 'screen'
 package 'git-core'
+package 'curl'
+package 'libcurl4-gnutls-dev'
 
 
 

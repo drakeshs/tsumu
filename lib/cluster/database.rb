@@ -1,7 +1,9 @@
+
+
 module Cluster
   class Database
 
-    attr_accessor :name
+    attr_accessor :name, :config
 
     def initialize( args = {} )
       @config = args.fetch( :config, nil)
@@ -41,6 +43,8 @@ module Cluster
           publicly_accessible: @config["publicly_accessible"],
           security_group_names: [group.id]
         })
+        sleep(1) while status[:status] != "available"
+        puts  "DB Created #{@config["name"]} for #{@stack.environment.name}!"
         get
       else
         puts  "DB #{@config["name"]} for #{@stack.environment.name} exists"
@@ -48,8 +52,10 @@ module Cluster
     end
 
     def destroy
+      puts "Destroy Database"
+      get.destroy unless get(true).nil?
+      sleep(3) while !get(true).nil?
       group.destroy if group
-      get.destroy if get(true) && get.state != "deleting"
     end
 
     # Use DB gruop name
@@ -69,7 +75,7 @@ module Cluster
 
     def status
       if exists?
-        server = get
+        server = get(true)
         {
           status: server.state,
           db_name: server.db_name,

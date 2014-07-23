@@ -38,7 +38,10 @@ module Cluster
     end
 
     def bootstrap(server)
-      server(server).bootstrap
+      raise "==>  Database Server is not ready" if @config["database"] && !@stack.database.exists?
+      args = {}
+      args[:database] = @stack.database if @config["database"]
+      server(server).bootstrap( args )
     end
 
     def servers_status

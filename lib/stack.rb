@@ -114,6 +114,15 @@ module Stack
     end
 
 
+    def get_application(application_name)
+      Cluster::Application.new(
+        name: application_name,
+        provider: @provider.compute,
+        config: @environment.config["applications"][application_name],
+        stack: self
+      )
+    end
+
     private
 
     def provider(strategy = :aws)
@@ -126,14 +135,6 @@ module Stack
         })
     end
 
-    def get_application(application_name)
-      Cluster::Application.new(
-        name: application_name,
-        provider: @provider.compute,
-        config: @environment.config["applications"][application_name],
-        stack: self
-      )
-    end
 
 
 

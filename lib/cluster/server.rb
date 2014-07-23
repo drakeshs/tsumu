@@ -40,6 +40,7 @@ module Cluster
     end
 
     def destroy
+      # FIXME Also destroy the chef node
       get.destroy if exists?
     end
 
@@ -74,8 +75,25 @@ module Cluster
       end
     end
 
-    def bootstrap
-      system "knife bootstrap #{get.public_ip_address} -x ubuntu -i keys/#{@application.stack.group.get.name}.pem -r 'role[#{@application.name}]' --secret-file .chef/encrypted_data_bag_secret --sudo -E #{@application.stack.environment.name}"
+    def bootstrap( args = {} )
+      require "json"
+      attributes={ }
+      if (database= args.fetch(:database, false))
+        status = database.status
+        attributes.merge!({
+          "application" => {
+            "database" => {
+              "host" => status[:dns].to_s,
+              "port" => status[:port].to_s,
+              "username" => database.config["master_username"],
+              "password" => database.config["master_user_password"],
+              "database" => status[:db_name].to_s
+              }
+            }
+          })
+      end
+      attributes = "--json-attributes '#{attributes.to_json}'" if attributes.any?
+      system "knife bootstrap #{get.public_ip_address} -x ubuntu -i keys/#{@application.stack.group.get.name}.pem -r 'role[#{@application.name}]' --secret-file .chef/encrypted_data_bag_secret --sudo -E #{@application.stack.environment.name} #{attributes}"
     end
 
     def add_group( group_name )

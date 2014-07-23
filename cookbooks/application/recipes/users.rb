@@ -19,6 +19,14 @@ end
   end
 end
 
+template "/#{user_home}/.profile" do
+  source "users/profile.erb"
+  owner user_name
+  group user_name
+  mode '0600'
+  variables :environment => node.environment
+end
+
 
 ssh_keys =  if node.environment == "local"
               data_bag('users').inject([]) do |memory, user|

@@ -1,0 +1,15 @@
+alias scc='script/console'
+alias be='bundle exec'
+alias ber='bundle exec rake'
+
+alias cdapp='cd /var/www/application/current'
+alias cdlog='cd /var/www/application/shared/log'
+alias cds='cd /var/www/application/shared'
+alias rc='bundle exec rails c'
+alias taillog='tail -F log/<%= @environment %>.log'
+alias server='be unicorn -c config/unicorn/config.rb'
+
+export RAILS_ENV='<%= @environment %>'
+
+echo "Welcome to Application Folder"
+cdapp
