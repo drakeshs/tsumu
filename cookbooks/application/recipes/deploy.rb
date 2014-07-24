@@ -24,8 +24,9 @@ end
 end
 
 
-unless File.exists?("/var/www/application/shared/config/database.yml")
-  template "/var/www/application/shared/config/database.yml" do
+database_yml = "/var/www/application/shared/config/database.yml"
+unless File.exists?(database_yml)
+  template database_yml do
     source "database.yml.erb"
     owner "deploy"
     group "deploy"
@@ -40,9 +41,38 @@ unless File.exists?("/var/www/application/shared/config/database.yml")
   end
 end
 
-unless File.exists?("/var/www/application/shared/config/constants/redis.yml")
-  template "/var/www/application/shared/config/constants/redis.yml" do
-    source "redis.yml.erb"
+redis_yml = "/var/www/application/shared/config/constants/redis.yml"
+unless File.exists?(redis_yml)
+  template redis_yml do
+    source "redis/redis.yml.erb"
+    owner "deploy"
+    group "deploy"
+    mode "0755"
+    variables({
+      host: node['application']['cache']['host'],
+      port: node['application']['cache']['port']
+    })
+  end
+end
+
+redis_cache_yml = "/var/www/application/shared/config/constants/redis_cache.yml"
+unless File.exists?(redis_cache_yml)
+  template redis_cache_yml do
+    source "redis/redis_cache.yml.erb"
+    owner "deploy"
+    group "deploy"
+    mode "0755"
+    variables({
+      host: node['application']['cache']['host'],
+      port: node['application']['cache']['port']
+    })
+  end
+end
+
+redis_sessions_yml = "/var/www/application/shared/config/constants/redis_sessions.yml"
+unless File.exists?(redis_sessions_yml)
+  template redis_sessions_yml do
+    source "redis/redis_sessions.yml.erb"
     owner "deploy"
     group "deploy"
     mode "0755"
