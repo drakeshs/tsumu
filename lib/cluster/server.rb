@@ -40,8 +40,11 @@ module Cluster
     end
 
     def destroy
-      # FIXME Also destroy the chef node
+      box_status = status
+      system "knife node delete ip-#{box_status[:private_ip_address].gsub(".","-")}.ec2.internal -y"
+      system "knife client delete ip-#{box_status[:private_ip_address].gsub(".","-")}.ec2.internal -y"
       get.destroy if exists?
+      p "Deleting box #{box_status[:ip]} for #{application.name}"
     end
 
     def status
