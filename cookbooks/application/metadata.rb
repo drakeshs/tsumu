@@ -4,7 +4,7 @@ maintainer_email 'YOUR_EMAIL'
 license          'All rights reserved'
 description      'Installs/Configures stallone'
 long_description 'Installs/Configures stallone'
-version          '0.1.10'
+version          '0.1.11'
 
 
 depends 'nginx'
