@@ -13,7 +13,7 @@ server {
     listen 80 default;
 
     # you could put a list of other domain names this application answers
-    server_name <%= @subdomain %>.application.com;
+    server_name _;
 
     root /var/www/application/current/public;
     access_log /var/www/application/log/nginx/my_site_access.log;
@@ -45,8 +45,8 @@ server {
     # and add a far future expires header to it, making the browser
     # cache the resource and navigate faster over the website
     # this probably needs some work with Rails 3.1's asset pipe_line
-    location ~ ^/(images|javascripts|stylesheets|system)/  {
-      root /home/deployer/apps/my_site/current/public;
+    location ~ ^/(assets|images|javascripts|stylesheets|system)/  {
+      root /var/www/application/current/public;
       expires max;
       break;
     }
