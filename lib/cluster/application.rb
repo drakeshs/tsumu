@@ -41,6 +41,7 @@ module Cluster
       raise "==>  Database Server is not ready" if @config["database"] && !@stack.database.exists?
       args = {}
       args[:database] = @stack.database if @config["database"]
+      args[:cache] = @stack.cache if @config["cache"]
       server(server).bootstrap( args )
     end
 

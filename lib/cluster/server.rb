@@ -44,7 +44,7 @@ module Cluster
       system "knife node delete ip-#{box_status[:private_ip_address].gsub(".","-")}.ec2.internal -y"
       system "knife client delete ip-#{box_status[:private_ip_address].gsub(".","-")}.ec2.internal -y"
       get.destroy if exists?
-      p "Deleting box #{box_status[:ip]} for #{application.name}"
+      p "Deleting box #{box_status[:ip]} for #{@application.name}"
     end
 
     def status
@@ -80,20 +80,27 @@ module Cluster
 
     def bootstrap( args = {} )
       require "json"
-      attributes={ }
+      attributes={ "application" => {} }
       if (database= args.fetch(:database, false))
         status = database.status
-        attributes.merge!({
-          "application" => {
-            "database" => {
-              "host" => status[:dns].to_s,
-              "port" => status[:port].to_s,
-              "username" => database.config["master_username"],
-              "password" => database.config["master_user_password"],
-              "database" => status[:db_name].to_s
-              }
+        attributes["application"].merge!({
+          "database" => {
+            "host" => status[:dns].to_s,
+            "port" => status[:port].to_s,
+            "username" => database.config["master_username"],
+            "password" => database.config["master_user_password"],
+            "database" => status[:db_name].to_s
             }
-          })
+        })
+      end
+      if (cache= args.fetch(:cache, false))
+        status = cache.status.first
+        attributes["application"].merge!({
+          "cache" => {
+            "host" => status[:address].to_s,
+            "port" => status[:port].to_s
+            }
+        })
       end
       attributes = "--json-attributes '#{attributes.to_json}'" if attributes.any?
       system "knife bootstrap #{get.public_ip_address} -x ubuntu -i keys/#{@application.stack.group.get.name}.pem -r 'role[#{@application.name}]' --secret-file .chef/encrypted_data_bag_secret --sudo -E #{@application.stack.environment.name} #{attributes}"

@@ -24,6 +24,26 @@ module Stack
                 ],
         :unicode => true
         )
+      p "Database Security Group for '#{@environment.name}' "
+      table(
+        db_group.get,
+        fields: [
+                  :group_id,
+                  :name,
+                  :ip_permissions
+                ],
+        :unicode => true
+        )
+      p "Cache Security Group for '#{@environment.name}' "
+      table(
+        cache_group.get,
+        fields: [
+                  :group_id,
+                  :name,
+                  :ip_permissions
+                ],
+        :unicode => true
+        )
       p "Database Server for '#{@environment.name}' "
       table( [database.status], :unicode => true )
       p "Cache Server for '#{@environment.name}' "
@@ -37,8 +57,8 @@ module Stack
       db_group.create unless db_group.exists?
       cache_group.create unless cache_group.exists?
       key_pair.create unless key_pair.exists?
-      database.create
-      cache.create
+      database.create unless database.exists?
+      cache.create unless cache.exists?
       applications.inject([]) do |threads,application|
         threads << Thread.new do
           application.create
