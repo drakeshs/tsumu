@@ -6,7 +6,7 @@ module Cluster
       @name = args.fetch(:name, "")
       @provider = args.fetch(:provider, "")
       @application = args.fetch(:application, nil)
-      @groups =  [ @application.stack.group.get.name ]
+      @groups = [@application.stack.group.get.name] if @application.stack.group.exists?
     end
 
     def get
@@ -41,10 +41,12 @@ module Cluster
 
     def destroy
       box_status = status
-      system "knife node delete ip-#{box_status[:private_ip_address].gsub(".","-")}.ec2.internal -y"
-      system "knife client delete ip-#{box_status[:private_ip_address].gsub(".","-")}.ec2.internal -y"
+      unless box_status[:private_ip_address].nil?
+        system "knife node delete ip-#{box_status[:private_ip_address].gsub(".","-")}.ec2.internal -y"
+        system "knife client delete ip-#{box_status[:private_ip_address].gsub(".","-")}.ec2.internal -y"
+      end
       get.destroy if exists?
-      p "Deleting box #{box_status[:ip]} for #{@application.name}"
+      p "Deleting box #{box_status[:ip]} #{box_status[:private_ip_address]} for #{@application.name}"
     end
 
     def status

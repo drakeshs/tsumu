@@ -39,8 +39,10 @@ module Cluster
     def destroy
       servers.inject([]) do |threads,server|
         threads << Thread.new do
-          server.destroy
-          sleep(1) while server.status[:status] != :none
+          if server.exists?
+            server.destroy
+            sleep(1) while server.status[:status] != :none
+          end
         end
       end.map(&:join)
       load_balancer.destroy if load_balancer.exists?

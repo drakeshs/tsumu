@@ -34,7 +34,6 @@ class MyCLI < Thor
   def destroy(environment)
     stack = Stack::Base.new( environment )
     stack.destroy
-    stack.status
   end
 
   desc "bootstrap ENV application server", "Chef bootstrap given server in given environment"

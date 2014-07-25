@@ -126,10 +126,10 @@ module Stack
         group.destroy if group.exists?
       end
       groups_thread << Thread.new do
-        db_group.create if db_group.exists?
+        db_group.destroy if db_group.exists?
       end
       groups_thread << Thread.new do
-        cache_group.create if cache_group.exists?
+        cache_group.destroy if cache_group.exists?
       end
       groups_thread << Thread.new do
         key_pair.destroy if key_pair.exists?
