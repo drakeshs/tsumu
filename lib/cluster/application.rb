@@ -75,6 +75,9 @@ module Cluster
       @load_balancer ||= Cluster::LoadBalancer.new( name: @name, stack: @stack, balancer: @balancer )
     end
 
+    # def assets_volume
+    #   @provider.volumes.create( device: "/dev/sda1", size: 8 , availability_zone: "us-east-1a" )
+    # end
 
     private
 

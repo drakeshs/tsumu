@@ -7,12 +7,20 @@ development:
       servers: 1
   mysql: [ "stallone" ]
   redis: [ "stallone" ]
+
+
+
 staging:
   group: staging
   applications:
+    # sumito:
+    #   servers: 1
+    #   flavor: t1.micro
+    #   image_id: "ami-00894c68"
     ottweb:
       servers: 1
       flavor: t1.micro
+      # flavor: m3.large
       # Ubuntu Server 14.04 LTS (PV), SSD Volume Type :: 64 bit
       # image_id: "ami-80778be8"
       # ubuntu/images/ebs-io1/ubuntu-saucy-13.10-amd64-server-20140608
@@ -21,8 +29,9 @@ staging:
       # image_id: "ami-013f9768"
 
     stallone:
-      servers: 1
+      servers: 2
       flavor: t1.micro
+      # flavor: m3.large
       # Ubuntu Server 14.04 LTS (PV), SSD Volume Type :: 64 bit
       # image_id: "ami-80778be8"
       # ubuntu/images/ebs-io1/ubuntu-saucy-13.10-amd64-server-20140608
@@ -50,5 +59,7 @@ staging:
     node_type: cache.t1.micro
     nodes: 1
     port: 10000
+
+
 production:
   group: production
