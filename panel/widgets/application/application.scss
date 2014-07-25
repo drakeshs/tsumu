@@ -1,0 +1,46 @@
+// ----------------------------------------------------------------------------
+// Sass declarations
+// ----------------------------------------------------------------------------
+$background-color:  #12b0c5;
+$value-color:       #fff;
+
+$title-color:       rgba(255, 255, 255, 0.7);
+$label-color:       rgba(255, 255, 255, 0.7);
+$moreinfo-color:    rgba(255, 255, 255, 0.7);
+
+// ----------------------------------------------------------------------------
+// Widget-list styles
+// ----------------------------------------------------------------------------
+.widget-application {
+
+  background-color: $background-color;
+  vertical-align: top;
+  text-align: left !important;
+
+  .subtitle{
+    color: $label-color;
+  }
+
+  .wid_title{
+    font-size: 0.9em;
+  }
+  .right{
+    float: right;
+  }
+  .id{
+    font-size: 0.9em;
+  }
+  .status{
+    font-size:  0.9em;
+  }
+  .ip{
+    font-size:  0.8em;
+  }
+  .private_ip_address{
+    font-size:  0.8em;
+  }
+  .dns{
+    font-size: 0.7em;
+  }
+
+}

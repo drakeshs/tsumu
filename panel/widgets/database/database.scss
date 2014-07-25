@@ -1,0 +1,40 @@
+// ----------------------------------------------------------------------------
+// Sass declarations
+// ----------------------------------------------------------------------------
+$background-color:  #12b0c5;
+$value-color:       #fff;
+
+$title-color:       rgba(255, 255, 255, 0.7);
+$label-color:       rgba(255, 255, 255, 0.7);
+$moreinfo-color:    rgba(255, 255, 255, 0.7);
+
+// ----------------------------------------------------------------------------
+// Widget-list styles
+// ----------------------------------------------------------------------------
+.widget-database {
+
+  background-color: $background-color;
+  vertical-align: top;
+  text-align: left !important;
+
+  .subtitle{
+    color: $label-color;
+  }
+  .status{
+    font-size: 1em;
+  }
+  .dns{
+    font-size: 0.7em;
+  }
+  .port{
+    font-size: 0.9em;
+  }
+  .db_name{
+    font-size: 0.9em;
+  }
+  .right{
+    float: right;
+  }
+
+
+}

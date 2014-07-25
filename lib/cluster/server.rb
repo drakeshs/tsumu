@@ -82,23 +82,23 @@ module Cluster
       require "json"
       attributes={ "application" => {} }
       if (database= args.fetch(:database, false))
-        status = database.status
+        i_status = database.status
         attributes["application"].merge!({
           "database" => {
-            "host" => status[:dns].to_s,
-            "port" => status[:port].to_s,
+            "host" => i_status[:dns].to_s,
+            "port" => i_status[:port].to_s,
             "username" => database.config["master_username"],
             "password" => database.config["master_user_password"],
-            "database" => status[:db_name].to_s
+            "database" => i_status[:db_name].to_s
             }
         })
       end
       if (cache= args.fetch(:cache, false))
-        status = cache.status.first
+        i_status = cache.status.first
         attributes["application"].merge!({
           "cache" => {
-            "host" => status[:address].to_s,
-            "port" => status[:port].to_s
+            "host" => i_status[:address].to_s,
+            "port" => i_status[:port].to_s
             }
         })
       end

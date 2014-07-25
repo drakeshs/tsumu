@@ -1,0 +1,31 @@
+<script type='text/javascript'>
+$(function() {
+Dashing.gridsterLayout('[{"col":3,"row":1,"size_x":1,"size_y":1},{"col":4,"row":1,"size_x":1,"size_y":1},{"col":1,"row":1,"size_x":1,"size_y":1},{"col":2,"row":1,"size_x":1,"size_y":1}]')
+});
+</script>
+
+<% content_for :title do %>Stack Staging <% end %>
+
+<h1>Staging Stack</h1>
+<div class="gridster">
+  <ul>
+
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="database_server" data-view="Database" ></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="cache_server" data-view="Cache" ></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="application_server_stallone" data-view="Application" data-title="Stallone" ></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="application_server_ottweb" data-view="Application" data-title="Ottweb" ></div>
+    </li>
+
+
+  </ul>
+</div>

@@ -53,18 +53,42 @@ module Stack
     end
 
     def create
-      group.create unless group.exists?
-      db_group.create unless db_group.exists?
-      cache_group.create unless cache_group.exists?
-      key_pair.create unless key_pair.exists?
-      database.create unless database.exists?
-      cache.create unless cache.exists?
-      applications.inject([]) do |threads,application|
-        threads << Thread.new do
+      groups_thread = []
+
+      groups_thread << Thread.new do
+        group.create unless group.exists?
+      end
+      groups_thread << Thread.new do
+        db_group.create unless db_group.exists?
+      end
+      groups_thread << Thread.new do
+        cache_group.create unless cache_group.exists?
+      end
+      groups_thread << Thread.new do
+        key_pair.create unless key_pair.exists?
+      end
+
+      groups_thread.map(&:join)
+
+      threads = []
+
+      threads << Thread.new do
+        database.create unless database.exists?
+      end
+
+      threads << Thread.new do
+        cache.create unless cache.exists?
+      end
+
+      applications.inject(threads) do |memory,application|
+        memory << Thread.new do
           application.create
           sleep(1) while !application.ready?
         end
-      end.map(&:join)
+      end
+
+      threads.map(&:join)
+
       puts "Application created... enjoy"
     end
 
@@ -77,15 +101,42 @@ module Stack
 
 
     def destroy
-      applications.each do |app|
-        app.destroy
+
+      threads = []
+
+      applications.inject(threads) do |memory,application|
+        memory << Thread.new do
+          application.destroy
+        end
       end
-      database.destroy
-      cache.destroy
-      group.destroy if group.exists?
-      db_group.create if db_group.exists?
-      cache_group.create if cache_group.exists?
-      key_pair.destroy if key_pair.exists?
+
+      threads << Thread.new do
+        database.destroy if database.exists?
+      end
+
+      threads << Thread.new do
+        cache.destroy if cache.exists?
+      end
+
+      threads.map(&:join)
+
+      groups_thread = []
+
+      groups_thread << Thread.new do
+        group.destroy if group.exists?
+      end
+      groups_thread << Thread.new do
+        db_group.create if db_group.exists?
+      end
+      groups_thread << Thread.new do
+        cache_group.create if cache_group.exists?
+      end
+      groups_thread << Thread.new do
+        key_pair.destroy if key_pair.exists?
+      end
+
+      groups_thread.map(&:join)
+
       puts "Application destroyed... :( come back soon"
     end
 
@@ -138,6 +189,7 @@ module Stack
       Cluster::Application.new(
         name: application_name,
         provider: @provider.compute,
+        balancer: @provider.balancer,
         config: @environment.config["applications"][application_name],
         stack: self
       )
@@ -151,7 +203,8 @@ module Stack
       @provider = OpenStruct.new({
           compute: Fog::Compute.new( { :provider => strategy.to_s.upcase }.merge( keys )),
           database: Fog::AWS::RDS.new( keys ),
-          cache: Fog::AWS::Elasticache.new( keys )
+          cache: Fog::AWS::Elasticache.new( keys ),
+          balancer: Fog::AWS::ELB.new( keys )
         })
     end
 
