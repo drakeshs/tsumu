@@ -1,0 +1,65 @@
+development:
+  group: development
+  applications:
+    ottweb:
+      servers: 1
+    stallone:
+      servers: 1
+  mysql: [ "stallone" ]
+  redis: [ "stallone" ]
+
+
+
+staging:
+  group: staging
+  applications:
+    # sumito:
+    #   servers: 1
+    #   flavor: t1.micro
+    #   image_id: "ami-00894c68"
+    ottweb:
+      servers: 1
+      flavor: t1.micro
+      # flavor: m3.large
+      # Ubuntu Server 14.04 LTS (PV), SSD Volume Type :: 64 bit
+      # image_id: "ami-80778be8"
+      # ubuntu/images/ebs-io1/ubuntu-saucy-13.10-amd64-server-20140608
+      image_id: "ami-00894c68"
+      # ubuntu/images/ebs/ubuntu-precise-12.04-amd64-server-20120728 -
+      # image_id: "ami-013f9768"
+
+    stallone:
+      servers: 2
+      flavor: t1.micro
+      # flavor: m3.large
+      # Ubuntu Server 14.04 LTS (PV), SSD Volume Type :: 64 bit
+      # image_id: "ami-80778be8"
+      # ubuntu/images/ebs-io1/ubuntu-saucy-13.10-amd64-server-20140608
+      image_id: "ami-00894c68"
+      # ubuntu/images/ebs/ubuntu-precise-12.04-amd64-server-20120728 -
+      # image_id: "ami-013f9768"
+
+      database: mysql-server
+      cache: redis-server
+  database:
+    name: mysql-server
+    engine: mysql
+    database: stallone
+    allocated_storage: 5
+    db_instance_class: db.t1.micro
+    master_username: "staging"
+    master_user_password: "staging1234"
+    db_security_groups: [default]
+    port: 3306
+    multi_az: false
+    publicly_accessible: false
+  cache:
+    name: redis-server
+    engine: redis
+    node_type: cache.t1.micro
+    nodes: 1
+    port: 10000
+
+
+production:
+  group: production

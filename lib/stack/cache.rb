@@ -1,4 +1,4 @@
-module Cluster
+module Stack
   class Cache
 
     attr_accessor :name

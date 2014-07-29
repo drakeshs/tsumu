@@ -1,4 +1,4 @@
-module Cluster
+module Stack
   class LoadBalancer
 
     attr_accessor :name

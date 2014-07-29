@@ -15,14 +15,14 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-require 'aws-sdk'
 require 'pry'
 require 'yaml'
 require 'hirb'
 
 PROJECT_ROOT = Pathname.new( __dir__ ).join("..")
-require PROJECT_ROOT.join("lib/cluster.rb")
+require PROJECT_ROOT.join("lib/stack.rb")
 
+Fog.mock!
 
 RSpec.configure do |config|
 # The settings below are suggested to provide a good initial experience

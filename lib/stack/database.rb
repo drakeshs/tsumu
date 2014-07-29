@@ -1,6 +1,6 @@
 
 
-module Cluster
+module Stack
   class Database
 
     attr_accessor :name, :config

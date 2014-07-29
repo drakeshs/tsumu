@@ -1,4 +1,4 @@
-module Cluster
+module Stack
   class Group
 
     attr_accessor :name
@@ -20,15 +20,12 @@ module Cluster
     def create
       unless exists?
         group = @provider.security_groups.create( name: @name, description: @name )
-
         @ports.each do |port|
           group.authorize_port_range( port..port, ip_protocol: :tcp )
         end
-
       end
       get
     end
-
 
     def destroy
       get.destroy if exists?

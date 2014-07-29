@@ -1,4 +1,4 @@
-module Cluster
+module Stack
   class KeyPair
     def initialize( name, provider )
       @name = name

@@ -20,8 +20,8 @@ class MyCLI < Thor
 
   desc "install ENV", "Create given stack environment"
   def install(environment)
-    stack = Stack::Base.new( environment )
-    stack.create
+    installer = Stack::Scripts::Installer.new( Stack::Base.new( environment ) )
+    installer.run
   end
 
   desc "reinstall ENV", "Create given stack environment"
@@ -32,8 +32,8 @@ class MyCLI < Thor
 
   desc "destroy ENV", "Destroy given stack environment"
   def destroy(environment)
-    stack = Stack::Base.new( environment )
-    stack.destroy
+    installer = Stack::Scripts::Uninstaller.new( Stack::Base.new( environment ) )
+    installer.run
   end
 
   desc "bootstrap ENV application server", "Chef bootstrap given server in given environment"

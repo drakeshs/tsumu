@@ -1,4 +1,4 @@
-module Cluster
+module Stack
   class Server
     attr_accessor :name
 
