@@ -59,7 +59,7 @@ module Stack
       it "should have a application builder to build servers" do
         builder = application.build
         computer = builder.instance_variable_get(:@computer)
-        expect(computer.commands.count).to eq(2)
+        expect(computer.commands.count).to eq(1)
       end
 
       it "should have application builder with multi server in parallel" do

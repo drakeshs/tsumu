@@ -32,6 +32,7 @@ module Stack
           port: @config["port"],
           security_groups: [group.id]
         })
+        # stop untill ready
       else
         puts "Cache #{@config["name"]} in #{@config["engine"]} for #{@stack.environment.name} already exists"
       end

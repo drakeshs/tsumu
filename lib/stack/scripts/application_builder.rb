@@ -12,44 +12,44 @@ module Stack
       end
 
       def preload
-        @computer.register @command_factory.create do
-          if !@application.load_balancer.exists? && @application.balanced?
-            p "Creating load balancer for application #{@application.name} "
-            @application.load_balancer.create
-            @application.load_balancer.add_security_group(@application.stack.group.get.name)
-            p "Load Balancer for application #{@application.name} created"
-          end
-        end
         if @application.balanced?
+          command = @command_factory.create("Creating load balancer for application #{@application.name} ") do
+                      if !@application.load_balancer.exists? && @application.balanced?
+                        @application.load_balancer.create
+                        @application.load_balancer.add_security_group(@application.stack.group.name)
+                      end
+                    end
+          @computer.register(command)
           commands = @application.servers.inject([]) do |cmds,server|
-            cmds << @command_factory.create do
+            cmds << @command_factory.create("Creating Server #{server.name} for application #{@application.name} ") do
                       unless server.exists?
-                        p "Creating Server #{server.name} for application #{@application.name} "
-                        server.add_group( @application.stack.db_group.get.name ) if @application.config["database"]
-                        server.add_group( @application.stack.cache_group.get.name ) if @application.config["cache"]
+                        server.add_group( @application.stack.db_group.name ) if @application.config["database"]
+                        server.add_group( @application.stack.cache_group.name ) if @application.config["cache"]
                         server.create
                         sleep(1) while server.status[:status] != "running"
                         @application.load_balancer.add_instance( server.get.id ) if @application.balanced?
-                        p "Server #{server.name} for application #{@application.name} created"
                       end
                     end
             cmds
           end
            @computer.register commands
         else
-         @computer.register @command_factory.create do
-            server = @application.servers.first
-            unless server.exists?
-              p "Creating Server #{server.name} for application #{@application.name} "
-              server.add_group( @application.stack.db_group.get.name ) if @application.config["database"]
-              server.add_group( @application.stack.cache_group.get.name ) if @application.config["cache"]
-              server.create
-              sleep(1) while server.status[:status] != "running"
-              @application.load_balancer.add_instance( server.get.id ) if @application.balanced?
-              p "Server #{server.name} for application #{@application.name} created"
-            end
-          end
+          server = @application.servers.first
+          command = @command_factory.create("Creating Server #{server.name} for application #{@application.name} ") do
+                      unless server.exists?
+                        server.add_group( @application.stack.db_group.name ) if @application.config["database"]
+                        server.add_group( @application.stack.cache_group.name ) if @application.config["cache"]
+                        server.create
+                        sleep(1) while server.status[:status] != "running"
+                        @application.load_balancer.add_instance( server.get.id ) if @application.balanced?
+                      end
+                    end
+          @computer.register(command)
         end
+      end
+
+      def commands
+        @computer.commands
       end
 
       def run

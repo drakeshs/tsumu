@@ -7,28 +7,28 @@ module Stack
       let(:to_execute) { (34 + 16) * 2 }
       let(:to_exception) { raise "an error ocurred" }
       let(:command) do
-        command = Stack::Brain::Command.new
+        command = Stack::Brain::Command.new("Command ")
         command.load do
           to_execute
         end
         command
       end
       let(:command_second) do
-        command = Stack::Brain::Command.new
+        command = Stack::Brain::Command.new("Command Second")
         command.load do
           to_execute * 2
         end
         command
       end
       let(:command_exception) do
-        command = Stack::Brain::Command.new
+        command = Stack::Brain::Command.new("Command exception")
         command.load do
           to_exception
         end
         command
       end
       let(:command_stop_exception) do
-        command = Stack::Brain::Command.new
+        command = Stack::Brain::Command.new("Command Ohh Noo")
         command.load do
           raise Stack::Brain::Computer::Stop.new("ohhh nooo")
         end

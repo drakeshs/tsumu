@@ -12,24 +12,27 @@ module Stack
       end
 
       def preload
-        @computer.register @command_factory.create do
-          if @application.load_balancer.exists?
-            p "Deleting load balancer for application #{@application.name} "
-            @application.load_balancer.destroy
-            p "Load Balancer for application #{@application.name} deleted"
-          end
+        if @application.balanced?
+          command = @command_factory.create("Deleting load balancer for application #{@application.name}") do
+                      if @application.load_balancer.exists?
+                        @application.load_balancer.destroy
+                      end
+                    end
+          @computer.register(command)
         end
         commands = @application.servers.inject([]) do |cmds,server|
-          cmds << @command_factory.create do
-                    p "Deleting Server #{server.name} for application #{@application.name} "
+          cmds << @command_factory.create("Deleting Server #{server.name} for application #{@application.name} ") do
                     if server.exists?
                       server.destroy
                     end
-                    p "Server #{server.name} for application #{@application.name} deleted"
                   end
           cmds
         end
          @computer.register commands
+      end
+
+      def commands
+        @computer.commands
       end
 
       def run

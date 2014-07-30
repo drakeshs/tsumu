@@ -13,35 +13,46 @@ module Stack
 
       def preload
         commands = []
-        commands << @command_factory.create do
+        commands << @command_factory.create("Deleting Database #{@stack.database.name}") do
+          if @stack.database.exists?
+            @stack.database.destroy
+          end
+        end
+        commands << @command_factory.create("Deleting Cache #{@stack.cache.name}") do
+          if @stack.cache.exists?
+            @stack.cache.destroy
+          end
+        end
+
+        @computer.register commands
+
+        @stack.applications.each do |application|
+          application.destroy.run
+        end
+
+        commands = []
+        commands << @command_factory.create("Deleting key pair") do
           if @stack.key_pair.exists?
-            p "Deleting key pair"
             @stack.key_pair.destroy
-            p "Key pair deleted"
           end
         end
-        commands << @command_factory.create do
+        commands << @command_factory.create("Deleting Group #{@stack.group.name}") do
           if @stack.group.exists?
-            p "Deleting Group #{@stack.group.name}"
             @stack.group.destroy
-            p "Group #{@stack.group.name} deleted"
           end
         end
-        commands << @command_factory.create do
+        commands << @command_factory.create("Deleting Group #{@stack.db_group.name}") do
           if @stack.db_group.exists?
-            p "Deleting Group #{@stack.db_group.name}"
             @stack.db_group.destroy
-            p "Group #{@stack.db_group.name} deleted"
           end
         end
-        commands << @command_factory.create do
+        commands << @command_factory.create("Deleting Group #{@stack.cache_group.name}") do
           if @stack.cache_group.exists?
-            p "Deleting Group #{@stack.cache_group.name}"
             @stack.cache_group.destroy
-            p "Group #{@stack.cache_group.name} deleted"
           end
         end
         @computer.register commands
+
       end
 
       def run

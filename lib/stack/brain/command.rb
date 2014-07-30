@@ -2,19 +2,24 @@ module Stack
   module Brain
     class Command
 
-      attr_reader :instruction
+      attr_reader :instruction, :name
 
-      def initialize
+      def initialize(name)
+        @name = name
         @instruction = Proc.new{}
         @error = Proc.new{}
       end
 
       def load(&block)
         @instruction = block
+        raise "Check your instruction" if @instruction.nil?
       end
 
       def execute
-        @instruction.call()
+        p @name
+        result = @instruction.call()
+        p "#{@name} :: Done"
+        result
       end
 
       def register_error(&block)
@@ -25,8 +30,8 @@ module Stack
         @error.call()
       end
 
-      def self.create(&block)
-        command = new
+      def self.create(name, &block)
+        command = new(name)
         command.load(&block)
         command
       end

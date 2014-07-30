@@ -7,7 +7,7 @@ module Stack
       let(:contextual_sum) { 34 + other  }
       let(:other) { 16 }
       let(:on_error) { 404 }
-      let(:command) { Stack::Brain::Command.new }
+      let(:command) { Stack::Brain::Command.new("new command") }
 
       it "should be able to load a command in context" do
         command.load do
@@ -28,6 +28,14 @@ module Stack
           on_error
         end
         command.on_error.should eq (on_error)
+      end
+
+      it "should factor a new command" do
+        command = Stack::Brain::Command.create("other commands") do
+          345
+        end
+        expect(command).to be_instance_of(Stack::Brain::Command)
+        expect(command.execute).to eq(345)
       end
 
     end

@@ -51,10 +51,10 @@ module Stack
         begin
           @output << do_log( command, command.execute )
         rescue Stack::Brain::Computer::Stop => e
-          @output << do_error( command, "#{e.message}\n" << e.backtrace.join("\n") )
+          @output << do_error( command, "#{command.name} :: #{e.message}\n" << e.backtrace.join("\n") )
           raise Stack::Brain::Computer::Stop.new("aborted execution")
         rescue Exception => e
-          @output << do_error( command, "#{e.message}\n" << e.backtrace.join("\n") )
+          @output << do_error( command, "#{command.name} :: #{e.message}\n" << e.backtrace.join("\n") )
         end
       end
 

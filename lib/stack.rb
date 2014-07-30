@@ -111,6 +111,7 @@ module Stack
         name: application_name,
         provider: @provider.compute,
         balancer: @provider.balancer,
+        cdn: @provider.cdn,
         config: @environment.config["applications"][application_name],
         stack: self
       )
@@ -125,7 +126,8 @@ module Stack
           compute: Fog::Compute.new( { :provider => strategy.to_s.upcase }.merge( keys )),
           database: Fog::AWS::RDS.new( keys ),
           cache: Fog::AWS::Elasticache.new( keys ),
-          balancer: Fog::AWS::ELB.new( keys )
+          balancer: Fog::AWS::ELB.new( keys ),
+          cdn: Fog::CDN.new({ :provider => strategy.to_s.upcase }.merge( keys ))
         })
     end
 

@@ -29,10 +29,7 @@ module Stack
           tags: { name: @name, group: @application.stack.group.get.name  }
           })
         puts "Launching #{@name} #{server.id}, status: #{server.state}"
-        while server.state == :pending
-          puts "."
-          sleep 10
-        end
+        server.wait_for { sleep(1); ready? }
         puts "Launched server #{server.id}, status: #{server.state}"
       else
         puts "Server #{get.id} is already running"

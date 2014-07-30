@@ -7,6 +7,7 @@ module Stack
       @name = args.fetch(:name, nil)
       @provider = args.fetch(:provider, nil)
       @balancer = args.fetch(:balancer, nil)
+      @cdn = args.fetch(:cdn, nil)
       @config = args.fetch(:config, {})
       @stack = args.fetch(:stack, {})
     end
@@ -56,6 +57,10 @@ module Stack
 
     def load_balancer
       @load_balancer ||= Stack::LoadBalancer.new( name: @name, stack: @stack, balancer: @balancer )
+    end
+
+    def cdn
+      @cdn ||= Stack::Cdn.new( name: @name, stack: @stack, provider: @cdn )
     end
 
     private
