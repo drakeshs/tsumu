@@ -1,36 +1,47 @@
 <div class="wid_title"><img src="/assets/ec2.png" width="40">Application <span data-bind="title"></span> </div>
+<ul>
+  <li data-showif="load_balancer">
+    <a data-bind-href="load_balancer | prepend 'http://'" target="_blank">
+        Load Balancer
+    </a>
+    <hr/>
+  </li>
 
-<a class="right" data-bind-href="load_balancer | prepend 'http://'" target="_blank">
-    <span data-bind="load_balancer"></span>
-</a>
-<hr/>
-<li data-foreach-item="application_nodes">
-  <div>
-    <span class="subtitle">Id:</span>
-    <span class="right id" data-bind="item.id"></span>
-  </div>
+  <li data-showif="cdn">
+    <a data-bind-href="cdn | prepend 'http://'" target="_blank">
+        CDN
+    </a>
+    <hr/>
+  </li>
 
-  <div>
-    <span class="subtitle">Name:</span>
-    <span class="right status" data-bind="item.name"></span>
-  </div>
+  <li data-foreach-item="application_nodes">
+    <div>
+      <span class="subtitle">Id:</span>
+      <span class="right id" data-bind="item.id"></span>
+    </div>
 
-  <div>
-    <span class="subtitle">Ip:</span>
-    <span class="right ip" data-bind="item.ip"></span>
-  </div>
+    <div>
+      <span class="subtitle">Name:</span>
+      <span class="right status" data-bind="item.name"></span>
+    </div>
 
-  <div>
-    <span class="subtitle">Private Ip:</span>
-    <span class="right private_ip_address" data-bind="item.private_ip_address"></span>
-  </div>
+    <div>
+      <span class="subtitle">Ip:</span>
+      <span class="right ip" data-bind="item.ip"></span>
+    </div>
 
-  <div>
-    <span class="subtitle">DNS:</span>
-     <a data-bind-href="item.dns | prepend 'http://'" target="_blank">
-      <span class="right dns" data-bind="item.dns"></span>
-     </a>
-  </div>
+    <div>
+      <span class="subtitle">Private Ip:</span>
+      <span class="right private_ip_address" data-bind="item.private_ip_address"></span>
+    </div>
 
-  <hr/>
-</li>
+    <div>
+      <span class="subtitle">DNS:</span>
+       <a data-bind-href="item.dns | prepend 'http://'" target="_blank">
+        <span class="right dns" data-bind="item.dns"></span>
+       </a>
+    </div>
+
+    <hr/>
+  </li>
+</ul>

@@ -7,7 +7,7 @@ module Stack
       @name = args.fetch(:name, nil)
       @provider = args.fetch(:provider, nil)
       @balancer = args.fetch(:balancer, nil)
-      @cdn = args.fetch(:cdn, nil)
+      @provider_cdn = args.fetch(:cdn, nil)
       @config = Config.new( args.fetch(:config, {}) )
       @stack = args.fetch(:stack, {})
     end
@@ -20,6 +20,10 @@ module Stack
 
     def balanced?
       @config.balanced?
+    end
+
+    def cdn?
+      @config.cdn?
     end
 
 
@@ -66,7 +70,7 @@ module Stack
     end
 
     def cdn
-      @cdn ||= Stack::Cdn.new( name: @name, stack: @stack, provider: @cdn )
+      @instance_cdn ||= Stack::Cdn.new( name: @name, application: self, provider: @provider_cdn )
     end
 
     private

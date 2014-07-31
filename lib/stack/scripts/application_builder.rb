@@ -14,13 +14,19 @@ module Stack
       def preload
         if @application.balanced?
           command = @command_factory.create("Creating load balancer for application #{@application.name} ") do
-                      if !@application.load_balancer.exists? && @application.balanced?
+                      unless @application.load_balancer.exists?
                         @application.load_balancer.create
                         @application.load_balancer.add_security_group(@application.stack.group.name)
                       end
                     end
           @computer.register(command)
 
+          if @application.cdn?
+            command = @command_factory.create("Creating CDN #{@application.cdn.name} for application #{@application.name} ") do
+                        @application.cdn.create unless @application.cdn.exists?
+                      end
+            @computer.register(command)
+          end
 
           commands = @application.servers.inject([]) do |cmds,server|
             cmds << @command_factory.create("Creating Server #{server.name} for application #{@application.name} ") do

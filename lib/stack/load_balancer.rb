@@ -19,11 +19,14 @@ module Stack
 
 
     def create
-      @balancer.load_balancers.create({
-        security_groups:[@stack.group.name],
-        id: @name,
-        availability_zones: ["us-east-1a", "us-east-1b", "us-east-1d"]
-        })
+      unless exists?
+        lb = @balancer.load_balancers.create({
+          security_groups:[@stack.group.name],
+          id: @name,
+          availability_zones: ["us-east-1a", "us-east-1b", "us-east-1d"]
+          })
+        lb.wait_for { sleep(1); ready? }
+      end
       get
     end
 

@@ -20,6 +20,7 @@ end
 def application_status( stack , name )
   app = stack.get_application(name)
   status = app.servers_status
-  load_balancer = app.load_balancer.nil? ? false : app.load_balancer.get.dns_name
-  { environment: stack.environment.name , load_balancer: load_balancer, application_nodes: status }
+  load_balancer = app.balanced? ?  app.load_balancer.get.dns_name : false
+  cdn = app.cdn? ? app.cdn.get.domain : false
+  { environment: stack.environment.name , load_balancer: load_balancer, application_nodes: status, cdn: cdn }
 end
