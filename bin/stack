@@ -37,9 +37,9 @@ class MyCLI < Thor
   end
 
   desc "bootstrap ENV application server", "Chef bootstrap given server in given environment"
-  def bootstrap(environment, application, server=nil)
-    stack = Stack::Base.new( environment )
-    stack.bootstrap(application, server)
+  def bootstrap(environment)
+    bootstrapper = Stack::Scripts::Bootstrapper.new( Stack::Base.new( environment ) )
+    bootstrapper.run
   end
 
   desc "cache ENV action", "Execute actions over cache server \n Actions: [ create, destroy, status ]"

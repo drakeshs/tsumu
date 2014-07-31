@@ -8,7 +8,7 @@ module Stack
       @provider = args.fetch(:provider, nil)
       @balancer = args.fetch(:balancer, nil)
       @cdn = args.fetch(:cdn, nil)
-      @config = args.fetch(:config, {})
+      @config = Config.new( args.fetch(:config, {}) )
       @stack = args.fetch(:stack, {})
     end
 
@@ -19,7 +19,18 @@ module Stack
     end
 
     def balanced?
-      @config["servers"].to_i > 1
+      @config.balanced?
+    end
+
+
+    def database?
+      raise "==>  Database Server is not ready" if @config.database? && !@stack.database.exists?
+      @config.database?
+    end
+
+    def cache?
+      raise "==>  Cache Server is not ready" if @config.cache? && !@stack.cache.exists?
+      @config.cache?
     end
 
     def build
@@ -30,21 +41,16 @@ module Stack
       Stack::Scripts::ApplicationDestroyer.new(self)
     end
 
-    def bootstrap(server = nil )
-      raise "==>  Database Server is not ready" if @config["database"] && !@stack.database.exists?
-      raise "==>  Cache Server is not ready" if @config["cache"] && !@stack.cache.exists?
+    def bootstrap()
       args = {}
-      args[:database] = @stack.database if @config["database"]
-      args[:cache] = @stack.cache if @config["cache"]
-      if server.nil?
-        servers.inject([]) do |threads,i_server|
-          threads << Thread.new do
-            i_server.bootstrap( args )
-          end
-        end.map(&:join)
-      else
-        get_server(server).bootstrap( args )
-      end
+      args[:database] = @stack.database if database?
+      args[:cache] = @stack.cache if cache?
+      servers.inject([]) do |threads,i_server|
+        threads << Thread.new do
+          p "Bootstrapping #{i_server.name} for application #{@name}"
+          i_server.bootstrap( args )
+        end
+      end.map(&:join)
     end
 
     def servers_status
@@ -76,5 +82,32 @@ module Stack
         Stack::Server.new( {name: name}.merge(server_config) )
       end
 
+      class Config
+
+        extend Forwardable
+
+        def_delegator :@config, :[]
+
+        def initialize(config)
+          @config = config
+        end
+
+        def balanced?
+          @config["servers"].to_i > 1
+        end
+
+        def database?
+          @config.has_key?("database") && @config["database"]
+        end
+
+        def cache?
+          @config.has_key?("cache") && @config["cache"]
+        end
+
+        def cdn?
+          @config.has_key?("cdn") && @config["cdn"]
+        end
+
+      end
   end
 end

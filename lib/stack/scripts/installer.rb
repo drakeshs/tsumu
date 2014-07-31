@@ -13,26 +13,23 @@ module Stack
 
       def preload
         commands = []
+
         commands << @command_factory.create("Creating key pair") do
-          unless @stack.key_pair.exists?
-            @stack.key_pair.create
-          end
+          @stack.key_pair.create unless @stack.key_pair.exists?
         end
+
         commands << @command_factory.create("Creating Group #{@stack.group.name}") do
-          unless @stack.group.exists?
-            @stack.group.create
-          end
+          @stack.group.create unless @stack.group.exists?
         end
+
         commands << @command_factory.create("Creating Group #{@stack.db_group.name}") do
-          unless @stack.db_group.exists?
-            @stack.db_group.create
-          end
+          @stack.db_group.create unless @stack.db_group.exists?
         end
+
         commands << @command_factory.create("Creating Group #{@stack.cache_group.name}") do
-          unless @stack.cache_group.exists?
-            @stack.cache_group.create
-          end
+          @stack.cache_group.create unless @stack.cache_group.exists?
         end
+
         @computer.register commands
 
         commands = []
@@ -46,11 +43,12 @@ module Stack
             @stack.cache.create
           end
         end
-
         @computer.register commands
 
+        commands = []
+
         @stack.applications.each do |application|
-          application.build.run
+          application.build.commands.each{ |command| @computer.register command }
         end
 
       end

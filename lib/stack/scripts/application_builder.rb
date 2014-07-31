@@ -20,6 +20,8 @@ module Stack
                       end
                     end
           @computer.register(command)
+
+
           commands = @application.servers.inject([]) do |cmds,server|
             cmds << @command_factory.create("Creating Server #{server.name} for application #{@application.name} ") do
                       unless server.exists?
@@ -46,6 +48,7 @@ module Stack
                     end
           @computer.register(command)
         end
+
       end
 
       def commands

@@ -27,7 +27,7 @@ module Stack
         @computer.register commands
 
         @stack.applications.each do |application|
-          application.destroy.run
+          application.destroy.commands.each{ |command| @computer.register command }
         end
 
         commands = []

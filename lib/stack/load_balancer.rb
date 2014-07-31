@@ -20,7 +20,7 @@ module Stack
 
     def create
       @balancer.load_balancers.create({
-        security_groups:[@stack.group.get.name],
+        security_groups:[@stack.group.name],
         id: @name,
         availability_zones: ["us-east-1a", "us-east-1b", "us-east-1d"]
         })

@@ -26,7 +26,7 @@ module Stack
           image_id: @application.config["image_id"],
           groups: @groups,
           key_name: @application.stack.key_pair.get.name,
-          tags: { name: @name, group: @application.stack.group.get.name  }
+          tags: { name: @name, group: @application.stack.group.name  }
           })
         puts "Launching #{@name} #{server.id}, status: #{server.state}"
         server.wait_for { sleep(1); ready? }
@@ -78,36 +78,48 @@ module Stack
     end
 
     def bootstrap( args = {} )
-      require "json"
-      attributes={ "application" => {} }
-      if (database= args.fetch(:database, false))
-        i_status = database.status
-        attributes["application"].merge!({
-          "database" => {
-            "host" => i_status[:dns].to_s,
-            "port" => i_status[:port].to_s,
-            "username" => database.config["master_username"],
-            "password" => database.config["master_user_password"],
-            "database" => i_status[:db_name].to_s
-            }
-        })
-      end
-      if (cache= args.fetch(:cache, false))
-        i_status = cache.status.first
-        attributes["application"].merge!({
-          "cache" => {
-            "host" => i_status[:address].to_s,
-            "port" => i_status[:port].to_s
-            }
-        })
-      end
-      attributes = "--json-attributes '#{attributes.to_json}'" if attributes.any?
+      attributes = get_attributes(args)
+      attributes = attributes.any? ? "--json-attributes '#{attributes.to_json}'" : ""
       system "knife bootstrap #{get.public_ip_address} -x ubuntu -i keys/#{@application.stack.group.get.name}.pem -r 'role[#{@application.name}]' --secret-file .chef/encrypted_data_bag_secret --sudo -E #{@application.stack.environment.name} #{attributes}"
     end
+
+
 
     def add_group( group_name )
       @groups << group_name
     end
+
+    private
+
+      def get_attributes(args)
+        require "json"
+        attributes={ "application" => {} }
+
+        if (database= args.fetch(:database, false))
+          i_status = database.status
+          attributes["application"].merge!({
+            "database" => {
+              "host" => i_status[:dns].to_s,
+              "port" => i_status[:port].to_s,
+              "username" => database.config["master_username"],
+              "password" => database.config["master_user_password"],
+              "database" => i_status[:db_name].to_s
+              }
+          })
+        end
+
+        if (cache= args.fetch(:cache, false))
+          i_status = cache.status.first
+          attributes["application"].merge!({
+            "cache" => {
+              "host" => i_status[:address].to_s,
+              "port" => i_status[:port].to_s
+              }
+          })
+        end
+
+        attributes
+      end
 
   end
 end

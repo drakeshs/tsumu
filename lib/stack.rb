@@ -68,10 +68,6 @@ module Stack
       end
     end
 
-    def bootstrap(application_name, server)
-      get_application(application_name).bootstrap(server)
-    end
-
     def group
       @group ||= Stack::Group.new( @environment.group_name, @provider.compute, [22,80] )
     end

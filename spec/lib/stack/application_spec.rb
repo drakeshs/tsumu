@@ -24,10 +24,10 @@ module Stack
     context "fully application" do
 
       let(:config) {
-        { "servers" => 1, flavor: "t1.micro", image_id: "ami-00894c68" }
+        { "servers" => 1, flavor: "t1.micro", "image_id" => "ami-00894c68", "database" => true, "cache" => true, "cdn" => true }
       }
       let(:config_2) {
-        { "servers" => 3, flavor: "t1.micro", image_id: "ami-00894c68" }
+        { "servers" => 3, flavor: "t1.micro", "image_id" => "ami-00894c68" }
       }
       let(:stack) { Stack::Base.new("staging") }
 
@@ -77,7 +77,41 @@ module Stack
       end
 
 
+      describe "Configuration" do
+
+        it "should return a config object" do
+          expect(application.config).to be_instance_of(Stack::Application::Config)
+        end
+
+        it "should return if server are balanced" do
+          expect(application_2.config.balanced?).to eq(true)
+        end
+
+        it "should return if server is connected to database" do
+          expect(application.config.database?).to eq(true)
+          expect(application_2.config.database?).to eq(false)
+        end
+
+        it "should return if server is connected to cache" do
+          expect(application.config.cache?).to eq(true)
+          expect(application_2.config.cache?).to eq(false)
+        end
+
+        it "should return if server is connected to cache" do
+          expect(application.config.cache?).to eq(true)
+          expect(application_2.config.cache?).to eq(false)
+        end
+
+        it "should still be responding to []" do
+          expect(application.config["database"]).to be(true)
+        end
+
+
+
+      end
+
     end
+
 
 
   end
