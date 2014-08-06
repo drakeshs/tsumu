@@ -143,6 +143,18 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define "integration" do |integration|
+    integration.vm.hostname = "integration"
+    integration.vm.network "private_network", ip: "172.28.128.5"
+    integration.vm.provision :chef_solo do |chef|
+      chef.cookbooks_path = "chef/cookbooks"
+      chef.roles_path = "roles"
+      chef.data_bags_path = "data_bags"
+      chef.add_role "integration"
+      chef.encrypted_data_bag_secret_key_path = "#{ENV['HOME']}/Workserver/sumito/.chef/encrypted_data_bag_secret"
+    end
+  end
+
 
 
 end
