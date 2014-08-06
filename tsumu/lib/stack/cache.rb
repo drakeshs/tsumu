@@ -24,7 +24,7 @@ module Stack
           create_group
           authorize_group
         end
-        @provider.clusters.create({
+        cache = @provider.clusters.create({
           id: @config["name"],
           nodes: @config["nodes"],
           node_type: @config["node_type"],
@@ -32,6 +32,7 @@ module Stack
           port: @config["port"],
           security_groups: [group.id]
         })
+
         # stop untill ready
       else
         puts "Cache #{@config["name"]} in #{@config["engine"]} for #{@stack.environment.name} already exists"

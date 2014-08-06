@@ -13,6 +13,10 @@ development:
 staging:
   group: staging
   applications:
+    integration:
+      servers: 1
+      flavor: t1.micro
+      image_id: "ami-00894c68"
     ottweb:
       cdn: true
       servers: 2
