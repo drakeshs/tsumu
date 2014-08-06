@@ -1,25 +1,7 @@
 Sumito
 ===============
 
-Sumito is a cluster environment creator based in chef and deployed to [AWS](http://aws.amazon.com).
-
-Chef recipes include 3 basic recipies to deploy a cluster under given 2 chef environments.
-
-
-Project Configuration
--------------------
-
-##### Chef folder
--------------------
-In order to deploy the recipes to real server we are using a hosted chef server un opscode. This configuration could change from project to proyect. This project are only hosting the recipes, policies and roles that holds the creation of the servers.
-
-Follow the convention to create the .chef folder with knife configuration [manually](http://docs.opscode.com/install_workstation.html#create-chef-directory) or use the one that is downloable from the hosted chef server. Every organization in chef hosted server has it's own dowloable chef sandbox.
-
-###### Chef Encryption Key
-
-All data bags that contains user keys are encrypted with a key. You will need to ask to a collegue for such key. Other wise you need to generate another key and re encrypt all data bags again and upload them to chef server.
-
-[Encrypt a Data Bag Item](http://docs.opscode.com/chef/essentials_data_bags.html#encrypt-a-data-bag-item)
+Sumito is a vendor agnostic cluster environment creator.
 
 
 ##### Keys Folder
