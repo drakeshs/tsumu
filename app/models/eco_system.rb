@@ -1,6 +1,6 @@
 class EcoSystem
   include Mongoid::Document
-  has_many :applications, dependent: :delete, autosave: true
+  has_many :applications, dependent: :delete, autosave: true, inverse_of: :eco_system
 
   field :name, type: String
   field :provider, type: String
@@ -8,6 +8,24 @@ class EcoSystem
   field :provider_access_key, type: String
   field :image_id, type: String
   field :flavor, type: String
+
+
+  rails_admin do
+    configure :applications
+    edit do
+      field :provider
+      field :provider_access_id
+      field :provider_access_key
+      field :image_id
+      field :flavor
+    end
+
+    list do
+      field :name
+      field :provider
+    end
+
+  end
 
   def fog_provider
     if provider == "aws"

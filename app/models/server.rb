@@ -6,11 +6,17 @@ class Server
   field :private_ip_address, type: String
   field :dns, type: String
 
-  belongs_to :application
+  belongs_to :application, inverse_of: :servers
 
   before_destroy :destroy_server
 
   rails_admin do
+
+    list do
+      field :eco_system_name
+      field :application
+      field :ip
+    end
 
     show do
       field :eco_system_name
@@ -26,11 +32,27 @@ class Server
     end
 
     edit do
-      # field :name
+      field :application
       # field :ip
       # field :private_ip_address
       # field :dns
       # field :created_at
+    end
+
+  end
+
+  state_machine :state, :initial => :creating do
+
+    event :build do
+      transition :creating => :ran_up
+    end
+
+    event :bootstrap do
+      transition :ran_up => :bootstraped
+    end
+
+    event :verify do
+      transition :bootstraped => :verified
     end
 
   end
