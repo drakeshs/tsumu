@@ -60,3 +60,7 @@ $RECYCLE.BIN/
 keys/*.pem
 keys/id_rsa*
 data_bags/users/*
+
+data
+log/*.log
+tmp
