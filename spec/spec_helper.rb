@@ -22,6 +22,7 @@ require 'hirb'
 PROJECT_ROOT = Pathname.new( __dir__ ).join("..")
 require PROJECT_ROOT.join("lib/stack.rb")
 
+Stack::Base::TEST=true
 Fog.mock!
 
 RSpec.configure do |config|

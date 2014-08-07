@@ -1,22 +1,7 @@
-development:
-  group: development
-  applications:
-    ottweb:
-      servers: 1
-    stallone:
-      servers: 1
-  mysql: [ "stallone" ]
-  redis: [ "stallone" ]
-
-
-
 staging:
   group: staging
   applications:
-    # sumito:
-    #   servers: 1
-    #   flavor: t1.micro
-    #   image_id: "ami-00894c68"
+
     ottweb:
       servers: 1
       flavor: t1.micro
@@ -41,6 +26,9 @@ staging:
 
       database: mysql-server
       cache: redis-server
+
+
+
   database:
     name: mysql-server
     engine: mysql
@@ -60,6 +48,3 @@ staging:
     nodes: 1
     port: 10000
 
-
-production:
-  group: production

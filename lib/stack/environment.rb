@@ -5,7 +5,7 @@ module Stack
 
     def initialize( args = {} )
       @name = args.fetch(:name, "development")
-      @test = args.fetch(:test, false)
+      @test = Stack::Base::TEST
       @group_name = "dish-env-#{@name}"
       load_config
       @description = load

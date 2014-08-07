@@ -1,0 +1,42 @@
+applications:
+  integration:
+  stallone:
+  ottweb:
+  anewstart:
+  ice_pak:
+  blockbuster_now:
+  synacor:
+  product_catalog:
+
+solar:
+  -
+    id: solar
+    ip:
+
+databases:
+  -
+    id: stallone
+    ip:
+    user:
+    password:
+    port:
+
+redis:
+  -
+    id: stallone
+    ip:
+    port:
+  -
+    id: stallone_1
+    ip:
+    port:
+  -
+    id: stallone_2
+    ip:
+    port:
+
+dependencies:
+  -
+    id: recurly
+    type: config
+    format: yml

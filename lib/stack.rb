@@ -3,7 +3,7 @@ Dir.glob(PROJECT_ROOT.join("lib","stack", "**", "*")).each { |file| require file
 
 module Stack
   class Base
-
+    TEST = false
     attr_accessor :provider, :environment
 
     def initialize( environment_name, strategy = :aws )
