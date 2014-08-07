@@ -5,7 +5,9 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-
 ["development", "qa", "staging", "production"].each do |env|
-  Application.create(name: "integration", environment: env)
+  es = EcoSystem.create(name: env)
+  YAML::load_file(Rails.root.join("config/stack.yml"))["applications"].each do |app|
+    es.applications << Application.create(name: app["name"], github: app["github"], environment: env)
+  end
 end

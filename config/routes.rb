@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :eco_systems
+
   resources :applications
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'

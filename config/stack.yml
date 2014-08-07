@@ -1,12 +1,28 @@
 applications:
-  integration:
-  stallone:
-  ottweb:
-  anewstart:
-  ice_pak:
-  blockbuster_now:
-  synacor:
-  product_catalog:
+  -
+    name: integration
+    github: http://someplace.com
+  -
+    name: stallone
+    github: http://someplace.com
+  -
+    name: ottweb
+    github: http://someplace.com
+  -
+    name: anewstart
+    github: http://someplace.com
+  -
+    name: ice_pak
+    github: http://someplace.com
+  -
+    name: blockbuster_now
+    github: http://someplace.com
+  -
+    name: synacor
+    github: http://someplace.com
+  -
+    name: product_catalog
+    github: http://someplace.com
 
 solar:
   -
