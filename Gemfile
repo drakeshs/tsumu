@@ -40,7 +40,6 @@ gem 'thor'
 gem 'fog'
 gem 'unf'
 
-gem 'dashing-rails'
 gem 'puma'
 gem 'mongoid'
 gem 'rails_admin'

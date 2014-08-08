@@ -1,25 +1,101 @@
-<h1>Listing eco_systems</h1>
+<%= render 'commons/content_header' %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <% @eco_systems.each do |eco_system| %>
-      <tr>
-        <td><%= eco_system.name %></td>
-        <td><%= link_to 'Show', eco_system %></td>
-        <td><%= link_to 'Edit', edit_eco_system_path(eco_system) %></td>
-        <td><%= link_to 'Destroy', eco_system, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<br>
+<div class="row">
+<!-- begin col-3 -->
+<div class="col-md-3 col-sm-6 ui-sortable">
+  <div class="widget widget-state bg-purple">
+    <div class="state-icon"><i class="fa fa-desktop"></i></div>
+    <div class="state-info">
+      <h4>Servers</h4>
+      <p><%= EcoSystem.first.applications.inject(0){|total,app| total + app.servers.count} %></p>
+    </div>
+    <div class="state-link">
+      <a href="javascript:;">View Detail <i class="fa fa-arrow-circle-o-right"></i></a>
+    </div>
+  </div>
+</div>
+<!-- end col-3 -->
+<!-- begin col-3 -->
+<div class="col-md-3 col-sm-6 ui-sortable">
+  <div class="widget widget-state bg-blue">
+    <div class="state-icon"><i class="fa fa-database"></i></div>
+    <div class="state-info">
+      <h4>Databases</h4>
+      <p>2</p>
+    </div>
+    <div class="state-link">
+      <a href="javascript:;">View Detail <i class="fa fa-arrow-circle-o-right"></i></a>
+    </div>
+  </div>
+</div>
+<!-- end col-3 -->
+<!-- begin col-3 -->
+<div class="col-md-3 col-sm-6 ui-sortable">
+  <div class="widget widget-state bg-green">
+    <div class="state-icon"><i class="fa fa-leaf"></i></div>
+    <div class="state-info">
+      <h4>Redis Clusters</h4>
+      <p>3</p>
+    </div>
+    <div class="state-link">
+      <a href="javascript:;">View Detail <i class="fa fa-arrow-circle-o-right"></i></a>
+    </div>
+  </div>
+</div>
+<!-- end col-3 -->
+<!-- begin col-3 -->
+<div class="col-md-3 col-sm-6 ui-sortable">
+  <div class="widget widget-state bg-red">
+    <div class="state-icon"><i class="fa fa-bars"></i></div>
+    <div class="state-info">
+      <h4>Memcache Clusters</h4>
+      <p>2</p>
+    </div>
+    <div class="state-link">
+      <a href="javascript:;">View Detail <i class="fa fa-arrow-circle-o-right"></i></a>
+    </div>
+  </div>
+</div>
+<!-- end col-3 -->
+</div>
 
-<%= link_to 'New Eco system', new_eco_system_path %>
+<% EcoSystem.first.applications.each do |app| %>
+
+<div class="panel panel-inverse">
+    <div class="panel-heading">
+        <div class="panel-heading-btn">
+            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+
+        </div>
+        <h4 class="panel-title"><%= app.name.capitalize %></h4>
+    </div>
+    <div class="panel-body">
+        <p>Servers</p>
+        <div class="col-md-10">
+          <% app.servers.each do |server| %>
+            <%= render partial: 'servers/widget_server', locals: { server: server } %>
+          <% end %>
+        </div>
+        <div class="col-md-2" style="background:#EEE; padding: 4px;">
+          <ul class="list-unstyled">
+            <li>
+              <button type="button" class="btn btn-success m-r-5 m-b-5">Deploy</button>
+            </li>
+            <li>
+              Last deploy: 2014-07-25
+            </li>
+            <hr/>
+            <li>
+              Last Commit: 2014-08-7
+              User: Someone
+              Code: 981261ih2rho71fñlnk
+            </li>
+          </ul>
+
+        </div>
+    </div>
+</div>
+
+<% end %>

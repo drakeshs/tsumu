@@ -1,0 +1,24 @@
+{
+  "name": "ottweb",
+  "version": "0.0.0",
+  "homepage": "https://github.com/sherbet/ottweb",
+  "authors": [
+    "cj <cgrimes@qwinixtech.com>"
+  ],
+  "license": "Commercial",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/assets/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-mocks": "~1.3.0",
+    "angulartics": "~0.15.20",
+    "angular-local-storage": "~0.0.5",
+    "bootstrap": "~3.2.0"
+    "angular-ui": "~3.2.0"
+  }
+}

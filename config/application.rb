@@ -30,6 +30,9 @@ module Tsumu
 
     config.mongoid.logger = Logger.new($stdout, :warn)
     # config.mongoid.persist_in_safe_mode = true
-
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'components')
+    # Disable frequently unused generators
+    config.generators.stylesheets = false
+    config.generators.javascripts = false
   end
 end

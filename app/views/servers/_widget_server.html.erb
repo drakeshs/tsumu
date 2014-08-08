@@ -1,0 +1,15 @@
+<div class="col-md-2 col-sm-2 ui-sortable">
+  <div class="widget widget-state bg-purple">
+    <div class="state-icon" style="line-height: 12px; font-size: 12px; height: 12px; width: 12px;"><i class="fa fa-desktop"></i></div>
+    <div class="state-info">
+      <h4><%= server.name %></h4>
+      <p><%= server.state %></p>
+      <% unless server.ip.nil? %>
+        <p><%= link_to server.ip, "http://#{server.ip}", class: "btn btn-white btn-xs", target: "_blank" %></p>
+      <% end %>
+    </div>
+    <div class="state-link" >
+      <a href="javascript:;" style="padding:0px;  ">View Detail <i class="fa fa-arrow-circle-o-right"></i></a>
+    </div>
+  </div>
+</div>

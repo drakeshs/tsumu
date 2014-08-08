@@ -46,13 +46,6 @@ GEM
       execjs
     coffee-script-source (1.7.1)
     connection_pool (2.0.0)
-    dashing-rails (2.3.2)
-      coffee-script (~> 2.2)
-      connection_pool (~> 2.0)
-      jquery-rails (~> 3.0)
-      rails (~> 4.1)
-      redis (~> 3.0)
-      rufus-scheduler (~> 3.0)
     diff-lcs (1.2.5)
     erubis (2.7.0)
     excon (0.39.3)
@@ -175,7 +168,6 @@ GEM
     rake (10.3.2)
     rdoc (4.1.1)
       json (~> 1.4)
-    redis (3.1.0)
     remotipart (1.2.1)
     rspec (3.0.0)
       rspec-core (~> 3.0.0)
@@ -189,8 +181,6 @@ GEM
     rspec-mocks (3.0.3)
       rspec-support (~> 3.0.0)
     rspec-support (3.0.3)
-    rufus-scheduler (3.0.8)
-      tzinfo
     safe_yaml (1.0.3)
     sass (3.2.19)
     sass-rails (4.0.3)
@@ -236,7 +226,6 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 4.0.0)
-  dashing-rails
   fog
   hirb
   jbuilder (~> 2.0)

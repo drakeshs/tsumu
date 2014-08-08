@@ -1,16 +1,17 @@
 Rails.application.routes.draw do
-  # resources :servers
 
-  # resources :eco_systems
+  resources :servers, except: [ :new, :edit ]
 
-  # resources :applications
+  resources :eco_systems, except: [ :new, :create, :destroy ]
+
+  resources :applications, except: [ :new, :create, :destroy ]
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  root 'eco_systems#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
