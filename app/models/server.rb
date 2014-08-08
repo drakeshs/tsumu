@@ -8,7 +8,7 @@ class Server
 
   belongs_to :application, inverse_of: :servers
 
-  before_destroy :destroy_server
+  before_destroy :destroy_box
 
   rails_admin do
 
@@ -55,6 +55,11 @@ class Server
       transition :bootstraped => :verified
     end
 
+    before_transition :creating => :ran_up do |server, transition|
+      server.box.create
+      server.update_after_run_up( server.box.get )
+    end
+
   end
 
   def eco_system_name
@@ -65,43 +70,30 @@ class Server
     application.eco_system
   end
 
-  def provider
-    eco_system.fog_provider.compute
-  end
 
-  def get
-    provider.servers.get(name)
-    rescue
-    nil
-  end
-
-  def exists?
-    !get.nil?
-  end
-
-  def destroy_server
-    get.destroy
-  end
-
-  def run_up
-    unless exists?
-      server = provider.servers.create({
-        flavor_id: application.safe_flavor,
-        image_id: application.safe_image_id,
-        # groups: @groups,
-        # key_name: @application.stack.key_pair.get.name,
-        tags: { name: @name, group: application.name, eco_system: application.eco_system.name  }
-        })
-      server.wait_for { sleep(1); ready? }
-      update_after_run_up( server )
-    end
-  end
 
   def update_after_run_up( server )
     update_attributes(  name: server.id,
                         ip: server.public_ip_address,
                         private_ip_address: server.private_ip_address,
-                        dns: server.dns_name )
+                          dns: server.dns_name )
+  end
+
+  def provider
+    eco_system.warehouse.compute
+  end
+
+  # Warehouse instance depending on provide's warehouse
+  def box
+    @provider_server ||= Provider::Factory.server( self, eco_system.provider, provider )
+  end
+
+
+  private
+
+
+  def destroy_box
+    box.destroy if box && box.exists?
   end
 
 

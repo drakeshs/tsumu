@@ -22,28 +22,31 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-gem 'spring',        group: :development
 
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
-gem 'pry'
-gem 'pry-doc'
-
-gem 'hirb'
-gem 'rspec'
-gem 'thor'
 gem 'fog'
 gem 'unf'
-
-gem 'puma'
 gem 'mongoid'
 gem 'rails_admin'
 gem 'rails_admin_flatly_theme', :git => 'git://github.com/konjoot/rails_admin_flatly_theme.git'
 
 gem 'state_machine'
 
+
+group :development, :test do
+  gem 'rspec-rails'
+  gem "factory_girl_rails", "~> 4.0"
+  gem 'pry'
+  gem 'pry-doc'
+  gem 'spring'
+end
+
+group :development do
+  gem 'puma'
+  gem 'capistrano-rails'
+end

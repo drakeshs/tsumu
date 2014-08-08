@@ -1,0 +1,27 @@
+<h1>Listing cache_groups</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Port</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cache_groups.each do |cache_group| %>
+      <tr>
+        <td><%= cache_group.name %></td>
+        <td><%= cache_group.port %></td>
+        <td><%= link_to 'Show', cache_group %></td>
+        <td><%= link_to 'Edit', edit_cache_group_path(cache_group) %></td>
+        <td><%= link_to 'Destroy', cache_group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Cache group', new_cache_group_path %>

@@ -1,6 +1,7 @@
 class EcoSystem
   include Mongoid::Document
   has_many :applications, dependent: :delete, autosave: true, inverse_of: :eco_system
+  has_many :key_pairs, dependent: :delete, autosave: true,  inverse_of: :eco_system
 
   field :name, type: String
   field :provider, type: String
@@ -27,7 +28,7 @@ class EcoSystem
 
   end
 
-  def fog_provider
+  def warehouse
     if provider == "aws"
       init_key = { :provider => provider }
       keys = { aws_access_key_id: provider_access_id,

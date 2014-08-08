@@ -1,0 +1,3 @@
+class DatabaseGroup < Group
+
+end

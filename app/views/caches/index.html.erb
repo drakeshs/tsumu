@@ -1,0 +1,27 @@
+<h1>Listing caches</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Ip</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @caches.each do |cach| %>
+      <tr>
+        <td><%= cach.name %></td>
+        <td><%= cach.ip %></td>
+        <td><%= link_to 'Show', cach %></td>
+        <td><%= link_to 'Edit', edit_cach_path(cach) %></td>
+        <td><%= link_to 'Destroy', cach, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Cache', new_cach_path %>

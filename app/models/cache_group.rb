@@ -1,0 +1,3 @@
+class CacheGroup < Group
+
+end

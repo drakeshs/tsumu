@@ -1,0 +1,27 @@
+<h1>Listing database_groups</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Port</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @database_groups.each do |database_group| %>
+      <tr>
+        <td><%= database_group.name %></td>
+        <td><%= database_group.port %></td>
+        <td><%= link_to 'Show', database_group %></td>
+        <td><%= link_to 'Edit', edit_database_group_path(database_group) %></td>
+        <td><%= link_to 'Destroy', database_group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Database group', new_database_group_path %>

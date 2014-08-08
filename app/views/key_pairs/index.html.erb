@@ -1,0 +1,29 @@
+<h1>Listing key_pairs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Key</th>
+      <th>Pub</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @key_pairs.each do |key_pair| %>
+      <tr>
+        <td><%= key_pair.name %></td>
+        <td><%= key_pair.key %></td>
+        <td><%= key_pair.pub %></td>
+        <td><%= link_to 'Show', key_pair %></td>
+        <td><%= link_to 'Edit', edit_key_pair_path(key_pair) %></td>
+        <td><%= link_to 'Destroy', key_pair, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Key pair', new_key_pair_path %>

@@ -17,7 +17,6 @@
 
 require 'pry'
 require 'yaml'
-require 'hirb'
 
 PROJECT_ROOT = Pathname.new( __dir__ ).join("..")
 require PROJECT_ROOT.join("lib/stack.rb")

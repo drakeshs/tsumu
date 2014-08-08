@@ -1,5 +1,21 @@
 Rails.application.routes.draw do
 
+  resources :key_pairs
+
+  resources :load_balancers
+
+  resources :cdns
+
+  resources :caches
+
+  resources :databases
+
+  resources :cache_groups
+
+  resources :database_groups
+
+  resources :server_groups
+
   resources :servers, except: [ :new, :edit ]
 
   resources :eco_systems, except: [ :new, :create, :destroy ]

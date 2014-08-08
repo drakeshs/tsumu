@@ -1,0 +1,25 @@
+<h1>Listing cdns</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Dns</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cdns.each do |cdn| %>
+      <tr>
+        <td><%= cdn.dns %></td>
+        <td><%= link_to 'Show', cdn %></td>
+        <td><%= link_to 'Edit', edit_cdn_path(cdn) %></td>
+        <td><%= link_to 'Destroy', cdn, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Cdn', new_cdn_path %>
