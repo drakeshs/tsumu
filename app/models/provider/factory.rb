@@ -2,7 +2,13 @@ module Provider
     class Factory
 
       def self.server( record, strategy, provider )
-        Object.const_get("::Provider::#{strategy.downcase.titlecase}::Box").new(record, provider)
+        class_name = case record
+        when Server
+          "Box"
+        when Database
+          "DbBox"
+        end
+        Object.const_get("::Provider::#{strategy.downcase.titlecase}::#{class_name}").new(record, provider)
       end
 
   end

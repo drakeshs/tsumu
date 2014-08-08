@@ -9,6 +9,10 @@ class EcoSystem
   field :provider_access_key, type: String
   field :image_id, type: String
   field :flavor, type: String
+  field :aws_region, type: String
+  field :aws_zone, type: String
+  field :vpc, type: String
+  field :subnet, type: String
 
 
   rails_admin do
@@ -19,6 +23,10 @@ class EcoSystem
       field :provider_access_key
       field :image_id
       field :flavor
+      field :aws_region
+      field :aws_zone
+      field :vpc
+      field :subnet
     end
 
     list do
@@ -32,7 +40,8 @@ class EcoSystem
     if provider == "aws"
       init_key = { :provider => provider }
       keys = { aws_access_key_id: provider_access_id,
-               aws_secret_access_key: provider_access_key }
+               aws_secret_access_key: provider_access_key,
+               region: "us-east-1" }
       @provider = OpenStruct.new({
         compute: Fog::Compute.new( init_key.merge( keys )),
         database: Fog::AWS::RDS.new( keys ),
@@ -42,6 +51,20 @@ class EcoSystem
       })
     else
       raise "well not developed yet"
+    end
+  end
+
+  def self.subnets
+    all.each_with_index do |eco_system, index|
+      subnet = eco_system.warehouse.compute.subnets.create(
+                  vpc_id:eco_system.warehouse.compute.vpcs.first.id,
+                  cidr_block:"172.30.#{index}.0/24",
+                  availability_zone: "us-east-1a",
+                  tag_set: {name: eco_system.name}
+                  )
+      eco_system.subnet = subnet.subnet_id
+      eco_system.vpc = eco_system.warehouse.compute.vpcs.first.id
+      eco_system.save
     end
   end
 

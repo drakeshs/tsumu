@@ -3,6 +3,6 @@ class Cache
   field :name, type: String
   field :ip, type: String
 
-  belongs_to :application, inverse_of: :cache
+  belongs_to :application, inverse_of: :caches
 
 end

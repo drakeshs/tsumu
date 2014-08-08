@@ -26,6 +26,7 @@ class Application
       field :image_id, :string
       field :flavor, :string
       field :server_roles, :string
+      field :databases
     end
     list do
       field :eco_system
@@ -34,6 +35,7 @@ class Application
     end
 
   end
+
 
   def safe_image_id
     self.image_id.nil? ? eco_system.image_id : self.image_id

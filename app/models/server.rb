@@ -56,20 +56,14 @@ class Server
     end
 
     before_transition :creating => :ran_up do |server, transition|
-      server.box.create
-      server.update_after_run_up( server.box.get )
+      server.build_box
     end
 
   end
 
-  def eco_system_name
-    application.eco_system.name
+  def provider
+    eco_system.warehouse.compute
   end
-
-  def eco_system
-    application.eco_system
-  end
-
 
 
   def update_after_run_up( server )
@@ -79,22 +73,7 @@ class Server
                           dns: server.dns_name )
   end
 
-  def provider
-    eco_system.warehouse.compute
-  end
 
-  # Warehouse instance depending on provide's warehouse
-  def box
-    @provider_server ||= Provider::Factory.server( self, eco_system.provider, provider )
-  end
-
-
-  private
-
-
-  def destroy_box
-    box.destroy if box && box.exists?
-  end
-
+  include ServerMethods
 
 end
