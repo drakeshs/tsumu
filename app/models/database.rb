@@ -11,9 +11,10 @@ class Database
   field :multi_az, type: Boolean, default: false
   field :publicly_accessible, type: Boolean, default: false
 
-  belongs_to :application, inverse_of: :servers
+  belongs_to :eco_system, inverse_of: :caches
   has_many :database_groups, inverse_of: :database
 
+  before_destroy :destroy_box
 
   state_machine :state, :initial => :creating do
 

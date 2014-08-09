@@ -2,12 +2,12 @@ class Application
   include Mongoid::Document
   belongs_to :eco_system
   has_many :servers, dependent: :delete, autosave: true,  inverse_of: :application
-  has_many :databases, dependent: :delete, autosave: true,  inverse_of: :application
-  has_many :caches, dependent: :delete, autosave: true,  inverse_of: :application
   has_many :cdns, dependent: :delete, autosave: true,  inverse_of: :application
   has_many :load_balancers, dependent: :delete, autosave: true,  inverse_of: :application
   has_many :server_groups, dependent: :delete, autosave: true,  inverse_of: :application
 
+  # has_many :databases, dependent: :delete, autosave: true,  inverse_of: :application
+  # has_many :caches, dependent: :delete, autosave: true,  inverse_of: :application
 
   field :name, type: String
   field :environment, type: String

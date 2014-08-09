@@ -29,13 +29,17 @@ module Provider
             vpc_id: @record.eco_system.vpc,
             subnet_id: @record.eco_system.subnet,
             # groups: @groups,
-            # key_name: @@record.application.stack.key_pair.get.name,
+            key_name: @record.application.eco_system.key_pairs.first.name,
             tags: { group: @record.application.name, eco_system: @record.eco_system_name  }
             })
           server.save
           server.wait_for { sleep(1); ready? }
           server
         end
+      end
+
+      def bootstrap
+        system "knife bootstrap #{get.public_ip_address} -x ubuntu -i keys/#{@record.application.eco_system.key_pairs.first.name}.pem -r 'role[#{@record.application.name}]' --secret-file .chef/encrypted_data_bag_secret --sudo -E #{@record.application.eco_system.name}"
       end
 
 

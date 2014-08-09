@@ -59,6 +59,10 @@ class Server
       server.build_box
     end
 
+    before_transition :ran_up => :bootstraped do |server, transition|
+      server.box.bootstrap
+    end
+
   end
 
   def provider

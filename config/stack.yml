@@ -1,28 +1,98 @@
+eco_systems:
+  -
+    name: development
+    provider: aws
+    provider_access_id: AKIAJPPGBVN72RZ4LB5A
+    provider_access_key: mAORtJpwQiKbZc6RPgL8WzKz8kHvpzhekmQM2Dr/
+    vpc: vpc-29812d4c
+    region: "us-east-1"
+  -
+    name: qa
+    provider: aws
+    provider_access_id: AKIAJPPGBVN72RZ4LB5A
+    provider_access_key: mAORtJpwQiKbZc6RPgL8WzKz8kHvpzhekmQM2Dr/
+    vpc: vpc-29812d4c
+    region: "us-east-1"
+  -
+    name: staging
+    provider: aws
+    provider_access_id: AKIAJPPGBVN72RZ4LB5A
+    provider_access_key: mAORtJpwQiKbZc6RPgL8WzKz8kHvpzhekmQM2Dr/
+    vpc: vpc-29812d4c
+    region: "us-east-1"
+  -
+    name: production
+    provider: aws
+    provider_access_id: AKIAJPPGBVN72RZ4LB5A
+    provider_access_key: mAORtJpwQiKbZc6RPgL8WzKz8kHvpzhekmQM2Dr/
+    vpc: vpc-29812d4c
+    region: "us-east-1"
+  -
+    name: deploy
+    provider: aws
+    provider_access_id: AKIAJPPGBVN72RZ4LB5A
+    provider_access_key: mAORtJpwQiKbZc6RPgL8WzKz8kHvpzhekmQM2Dr/
+    vpc: vpc-29812d4c
+    region: "us-east-1"
+
 applications:
+  -
+    name: brain
+    github: http://someplace.com
+    eco_systems: ["deploy"]
+    # redis: ["brain"]
+    flavor: t1.micro
+    image_id: "ami-00894c68"
   -
     name: integration
     github: http://someplace.com
+    eco_systems: ["development" , "qa" , "staging" , "production"]
+    flavor: t1.micro
+    image_id: "ami-00894c68"
   -
     name: stallone
     github: http://someplace.com
+    eco_systems: ["development" , "qa" , "staging" , "production"]
+    flavor: t1.micro
+    image_id: "ami-00894c68"
+    # database: [ "stallone "]
+    # redis: ["stallone"]
   -
     name: ottweb
     github: http://someplace.com
+    eco_systems: ["development" , "qa" , "staging" , "production"]
+    flavor: t1.micro
+    image_id: "ami-00894c68"
   -
     name: anewstart
     github: http://someplace.com
+    eco_systems: ["development" , "qa" , "staging" , "production"]
+    flavor: t1.micro
+    image_id: "ami-00894c68"
   -
     name: ice_pak
     github: http://someplace.com
+    eco_systems: ["development" , "qa" , "staging" , "production"]
+    flavor: t1.micro
+    image_id: "ami-00894c68"
   -
     name: blockbuster_now
     github: http://someplace.com
+    eco_systems: ["development" , "qa" , "staging" , "production"]
+    flavor: t1.micro
+    image_id: "ami-00894c68"
   -
     name: synacor
     github: http://someplace.com
+    eco_systems: ["development" , "qa" , "staging" , "production"]
+    flavor: t1.micro
+    image_id: "ami-00894c68"
   -
     name: product_catalog
     github: http://someplace.com
+    eco_systems: ["development" , "qa" , "staging" , "production"]
+    flavor: t1.micro
+    image_id: "ami-00894c68"
 
 solar:
   -
@@ -31,25 +101,29 @@ solar:
 
 databases:
   -
-    id: stallone
-    ip:
-    user:
-    password:
-    port:
+    name: stallone
+    master_username: "stallone"
+    master_user_password: "stallone1234"
+    port: 3306
+    engine: mysql
+    flavor_id: db.t1.micro
+    eco_systems: ["development" , "qa" , "staging" , "production"]
 
-redis:
+caches:
   -
-    id: stallone
-    ip:
-    port:
+    name: brain
+    engine: redis
+    node_type: cache.t1.micro
+    nodes: 1
+    port: 10000
+    eco_systems: ["deploy"]
   -
-    id: stallone_1
-    ip:
-    port:
-  -
-    id: stallone_2
-    ip:
-    port:
+    name: stallone
+    engine: redis
+    node_type: cache.t1.micro
+    nodes: 1
+    port: 10000
+    eco_systems: ["development" , "qa" , "staging" , "production"]
 
 dependencies:
   -

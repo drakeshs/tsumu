@@ -1,5 +1,5 @@
 class ServersController < ApplicationController
-  before_action :set_server, only: [:show, :edit, :update, :destroy]
+  before_action :set_server, only: [:show, :edit, :update, :destroy, :build, :bootstrap]
 
   # GET /servers
   # GET /servers.json
@@ -59,6 +59,15 @@ class ServersController < ApplicationController
       format.html { redirect_to servers_url, notice: 'Server was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+
+  def build
+    @server.build!
+  end
+
+  def bootstrap
+    @server.bootstrap!
   end
 
   private

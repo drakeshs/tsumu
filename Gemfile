@@ -37,6 +37,8 @@ gem 'rails_admin_flatly_theme', :git => 'git://github.com/konjoot/rails_admin_fl
 
 gem 'state_machine'
 
+gem 'sidekiq'
+
 
 group :development, :test do
   gem 'rspec-rails'
@@ -50,3 +52,9 @@ group :development do
   gem 'puma'
   gem 'capistrano-rails'
 end
+
+gem "chef"
+gem "knife-solo"
+gem "knife-vagrant2"
+gem "knife-ec2"
+gem "knife-solo_data_bag"

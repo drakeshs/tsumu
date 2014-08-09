@@ -8,7 +8,7 @@ RSpec.describe Server, :type => :model do
   let(:server) { Server.new( application:  application ) }
 
   it "should update serve's info after build" do
-    server.should_receive(:box).twice.and_return(OpenStruct.new( create: nil, get: nil ))
+    server.should_receive(:box).and_return(OpenStruct.new( create: nil, get: nil ))
     server.should_receive(:update_after_run_up)
     server.build!
   end

@@ -16,7 +16,12 @@ Rails.application.routes.draw do
 
   resources :server_groups
 
-  resources :servers, except: [ :new, :edit ]
+  resources :servers, except: [ :new, :edit ] do
+    member do
+      get :build
+      get :bootstrap
+    end
+  end
 
   resources :eco_systems, except: [ :new, :create, :destroy ]
 

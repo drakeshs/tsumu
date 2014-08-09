@@ -7,6 +7,8 @@ module Provider
           "Box"
         when Database
           "DbBox"
+        when KeyPair
+          "Key"
         end
         Object.const_get("::Provider::#{strategy.downcase.titlecase}::#{class_name}").new(record, provider)
       end
