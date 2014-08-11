@@ -46,7 +46,7 @@ applications:
   -
     name: integration
     github: http://someplace.com
-    eco_systems: ["development" , "qa" , "staging" , "production"]
+    eco_systems: ["deploy"]
     flavor: t1.micro
     image_id: "ami-00894c68"
   -

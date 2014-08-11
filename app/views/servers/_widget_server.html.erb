@@ -4,6 +4,9 @@
     <div class="state-info">
       <h4><%= server.name %></h4>
       <p><%= server.state %></p>
+      <% if Rails.env.development? && server.ip.present? %>
+        <p><%= server.ip %></p>
+      <% end %>
       <% unless server.private_ip_address.nil? %>
         <p><%= server.private_ip_address %></p>
         <p><%= link_to "Bootstrap", bootstrap_server_path(server), class: "btn btn-white btn-xs", target: "_blank" %></p>

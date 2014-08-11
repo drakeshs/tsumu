@@ -63,11 +63,13 @@ class ServersController < ApplicationController
 
 
   def build
-    @server.build!
+    ServerWorker.perform_async(@server.id.to_s, "build")
+    render text: "ok"
   end
 
   def bootstrap
-    @server.bootstrap!
+    ServerWorker.perform_async(@server.id.to_s, "bootstrap")
+    render text: "ok"
   end
 
   private

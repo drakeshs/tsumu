@@ -59,7 +59,8 @@ class EcoSystem
                   vpc_id:eco_system.warehouse.compute.vpcs.first.id,
                   cidr_block:"172.30.#{index}.0/24",
                   availability_zone: "us-east-1a",
-                  tag_set: {name: eco_system.name}
+                  tag_set: {name: eco_system.name},
+                  map_public_ip_on_launch: Rails.env.development?
                   )
       eco_system.subnet = subnet.subnet_id
       eco_system.vpc = eco_system.warehouse.compute.vpcs.first.id
