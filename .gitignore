@@ -63,4 +63,5 @@ data_bags/users/*
 
 data
 log/*.log
+log/pids
 tmp

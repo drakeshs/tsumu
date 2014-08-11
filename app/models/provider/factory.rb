@@ -9,6 +9,8 @@ module Provider
           "DbBox"
         when KeyPair
           "Key"
+        when Subnet
+          "SubnetBox"
         end
         Object.const_get("::Provider::#{strategy.downcase.titlecase}::#{class_name}").new(record, provider)
       end

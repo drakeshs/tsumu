@@ -74,7 +74,7 @@ class Server
     update_attributes(  name: server.id,
                         ip: server.public_ip_address,
                         private_ip_address: server.private_ip_address,
-                          dns: server.dns_name )
+                        dns: server.dns_name )
   end
 
 

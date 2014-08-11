@@ -4,17 +4,17 @@ class EcoSystem
   has_many :key_pairs, dependent: :delete, autosave: true,  inverse_of: :eco_system
   has_many :caches, dependent: :delete, autosave: true,  inverse_of: :eco_system
   has_many :databases, dependent: :delete, autosave: true,  inverse_of: :eco_system
+  embeds_one :subnet, inverse_of: :eco_system, class_name: "Subnet", cascade_callbacks: true
 
   field :name, type: String
   field :provider, type: String
   field :provider_access_id, type: String
   field :provider_access_key, type: String
-  field :aws_region, type: String
-  field :aws_zone, type: String
   field :region, type: String
   field :vpc, type: String
-  field :subnet, type: String
+  field :public_subnet, type: Boolean, default: false
 
+  accepts_nested_attributes_for :subnet
 
   rails_admin do
     configure :applications
@@ -22,15 +22,18 @@ class EcoSystem
       field :provider, :string
       field :provider_access_id, :string
       field :provider_access_key, :string
-      field :aws_region, :string
-      field :aws_zone, :string
+      field :region, :string
       field :vpc, :string
-      field :subnet, :string
+      field :subnet
     end
 
     list do
       field :name
       field :provider
+      field :vpc
+      field :subnet do
+        pretty_value{ value.box_id }
+      end
     end
 
   end
@@ -53,18 +56,16 @@ class EcoSystem
     end
   end
 
-  def self.subnets
+  def self.build_subnets
     all.each_with_index do |eco_system, index|
-      subnet = eco_system.warehouse.compute.subnets.create(
-                  vpc_id:eco_system.warehouse.compute.vpcs.first.id,
-                  cidr_block:"172.30.#{index}.0/24",
-                  availability_zone: "us-east-1a",
-                  tag_set: {name: eco_system.name},
-                  map_public_ip_on_launch: Rails.env.development?
-                  )
-      eco_system.subnet = subnet.subnet_id
-      eco_system.vpc = eco_system.warehouse.compute.vpcs.first.id
-      eco_system.save
+      Subnet.create(
+        eco_system: eco_system,
+        name: eco_system.name,
+        vpc_id: first.vpc ,
+        cidr_block: "172.30.#{index+2}.0/24",
+        availability_zone: eco_system.region<<"a",
+        map_public_ip_on_launch: Rails.env.development?,
+        )
     end
   end
 

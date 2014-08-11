@@ -69,7 +69,7 @@
             <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
 
         </div>
-        <h4 class="panel-title"><%= app.name.capitalize %></h4>
+        <h4 class="panel-title"><%= app.name.capitalize %>  << <%= app.id if Rails.env.development?  %>>> </h4>
     </div>
     <div class="panel-body">
         <p>Servers</p>

@@ -9,6 +9,10 @@ module ServerMethods
     application.eco_system
   end
 
+  def strategy
+    eco_system.provider
+  end
+
   def build_box
     update_after_run_up( box.run_up )
   end
@@ -19,7 +23,7 @@ module ServerMethods
 
   # Warehouse instance depending on provide's warehouse
   def box
-    @provider_server ||= Provider::Factory.server( self, eco_system.provider, provider )
+    @provider_server ||= Provider::Factory.server( self, strategy, provider )
   end
 
 end

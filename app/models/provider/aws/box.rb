@@ -27,7 +27,7 @@ module Provider
             flavor_id: @record.application.safe_flavor,
             image_id: @record.application.safe_image_id,
             vpc_id: @record.eco_system.vpc,
-            subnet_id: @record.eco_system.subnet,
+            subnet_id: @record.eco_system.subnet.box_id,
             # groups: @groups,
             key_name: @record.application.eco_system.key_pairs.first.name,
             tags: { group: @record.application.name, eco_system: @record.eco_system_name  }
