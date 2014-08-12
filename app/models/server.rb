@@ -53,7 +53,11 @@ class Server
     end
 
     event :bootstrap do
-      transition :ran_up => :bootstraped
+      transition :ran_up => :bootstraping
+    end
+
+    event :bootstrap_ended do
+      transition :bootstraping => :bootstraped
     end
 
     event :verify do
@@ -64,10 +68,15 @@ class Server
       server.build_box
     end
 
-    before_transition :ran_up => :bootstraped do |server, transition|
-      server.box.bootstrap
+    after_transition :on => :bootstraping do |server, transition|
+      server.bootstrap_job
     end
 
+  end
+
+  def bootstrap_job
+    box.bootstrap
+    bootstrap_ended!
   end
 
   def provision!
