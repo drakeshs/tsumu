@@ -1,6 +1,6 @@
 ---
 :concurrency: 5
-:pidfile: logs/pids/sidekiq.pid
+:pidfile: log/pids/sidekiq.pid
 qa:
   :concurrency: 6
 staging:

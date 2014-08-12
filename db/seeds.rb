@@ -26,6 +26,6 @@ end
 stack["applications"].each do |app|
   app.delete("eco_systems").each do |es|
     record = Application.create(app.merge({ eco_system: EcoSystem.where(name:es).first }) )
-    Server.create( application: record )
+    Server.create( application: record, groups_name: record.eco_system.server_groups.map(&:box_id) )
   end
 end

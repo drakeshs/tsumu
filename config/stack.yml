@@ -39,14 +39,14 @@ eco_systems:
 applications:
   -
     name: brain
-    github: http://someplace.com
+    github: git@github.com:josetonyp/tsumu.git
     eco_systems: ["deploy"]
     # redis: ["brain"]
     flavor: t1.micro
     image_id: "ami-00894c68"
   -
     name: integration
-    github: http://someplace.com
+    github:
     eco_systems: ["deploy"]
     flavor: t1.micro
     image_id: "ami-00894c68"

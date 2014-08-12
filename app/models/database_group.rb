@@ -1,5 +1,5 @@
 class DatabaseGroup < Group
 
-  belongs_to :database, inverse_of: :database_groups
+  embedded_in :eco_system, inverse_of: :database_groups
 
 end

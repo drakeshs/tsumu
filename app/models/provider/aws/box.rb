@@ -28,7 +28,7 @@ module Provider
             image_id: @record.application.safe_image_id,
             vpc_id: @record.eco_system.vpc,
             subnet_id: @record.eco_system.subnet.box_id,
-            # groups: @groups,
+            security_group_ids: @record.groups_name,
             key_name: @record.application.eco_system.key_pairs.first.name,
             tags: { group: @record.application.name, eco_system: @record.eco_system_name  }
             })
@@ -39,7 +39,8 @@ module Provider
       end
 
       def bootstrap
-        system "knife bootstrap #{get.public_ip_address} -x ubuntu -i keys/#{@record.application.eco_system.key_pairs.first.name}.pem -r 'role[#{@record.application.name}]' --secret-file .chef/encrypted_data_bag_secret --sudo -E #{@record.application.eco_system.name}"
+        log = "> log/bootstrap_#{@record.name}_#{@record.application.name}_#{@record.application.eco_system.rails_environment}.log 2> bootstrap_#{@record.name}_#{@record.application.name}_#{@record.application.eco_system.rails_environment}_error.log"
+        system "knife bootstrap #{get.public_ip_address} -x ubuntu -i keys/#{@record.application.eco_system.key_pairs.first.name}.pem -r 'role[#{@record.application.name}]' --secret-file .chef/encrypted_data_bag_secret --sudo -E #{@record.application.eco_system.rails_environment} #{log}"
       end
 
 

@@ -3,7 +3,6 @@
 .chef/encrypted_data_bag_secret
 .chef/knife.rb
 .vagrant
-.ruby-*
 
 chef
 
@@ -65,3 +64,4 @@ data
 log/*.log
 log/pids
 tmp
+workspace

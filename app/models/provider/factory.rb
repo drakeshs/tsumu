@@ -11,7 +11,14 @@ module Provider
           "Key"
         when Subnet
           "SubnetBox"
+        when ServerGroup
+          "ServerGroupBox"
+        when DatabaseGroup
+          "ServerGroupBox"
+        when CacheGroup
+          "ServerGroupBox"
         end
+
         Object.const_get("::Provider::#{strategy.downcase.titlecase}::#{class_name}").new(record, provider)
       end
 

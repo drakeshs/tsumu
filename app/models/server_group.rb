@@ -1,5 +1,5 @@
 class ServerGroup < Group
 
-  belongs_to :application, inverse_of: :application
+  embedded_in :eco_system, inverse_of: :server_groups
 
 end

@@ -1,5 +1,5 @@
 class ServersController < ApplicationController
-  before_action :set_server, only: [:show, :edit, :update, :destroy, :build, :bootstrap]
+  before_action :set_server, only: [:show, :edit, :update, :destroy, :build, :bootstrap, :provision]
 
   # GET /servers
   # GET /servers.json
@@ -24,11 +24,11 @@ class ServersController < ApplicationController
   # POST /servers
   # POST /servers.json
   def create
-    @server = Server.new(server_params)
+    @server = Server.new(application: application, groups_name: application.eco_system.server_groups.map(&:box_id) )
 
     respond_to do |format|
       if @server.save
-        format.html { redirect_to @server, notice: 'Server was successfully created.' }
+        format.html { redirect_to application.eco_system, notice: 'Server was successfully created.' }
         format.json { render :show, status: :created, location: @server }
       else
         format.html { render :new }
@@ -54,9 +54,9 @@ class ServersController < ApplicationController
   # DELETE /servers/1
   # DELETE /servers/1.json
   def destroy
-    @server.destroy
+    ServerWorker.perform_async(@server.id.to_s, "destroy")
     respond_to do |format|
-      format.html { redirect_to servers_url, notice: 'Server was successfully destroyed.' }
+      format.html { render text: "ok" }
       format.json { head :no_content }
     end
   end
@@ -72,6 +72,11 @@ class ServersController < ApplicationController
     render text: "ok"
   end
 
+  def provision
+    ServerWorker.perform_async(@server.id.to_s, "provision")
+    render text: "ok"
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_server
@@ -81,5 +86,9 @@ class ServersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def server_params
       params.require(:server).permit(:provider_id, :ip, :private_ip_address)
+    end
+
+    def application
+      @application ||= Application.find(params[:application_id])
     end
 end

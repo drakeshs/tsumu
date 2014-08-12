@@ -20,7 +20,7 @@ module Stack
     def create
       unless exists?
         group = @provider.security_groups.create( name: @name, description: @name )
-        @ports.each do |port|
+        @record.ports.each do |port|
           group.authorize_port_range( port..port, ip_protocol: :tcp )
         end
       end

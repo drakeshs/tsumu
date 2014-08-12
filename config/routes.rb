@@ -1,31 +1,29 @@
 Rails.application.routes.draw do
 
-  resources :key_pairs
 
   resources :load_balancers
 
   resources :cdns
 
-  resources :caches
 
-  resources :databases
-
-  resources :cache_groups
-
-  resources :database_groups
-
-  resources :server_groups
-
-  resources :servers, except: [ :new, :edit ] do
-    member do
-      get :build
-      get :bootstrap
-    end
+  resources :eco_systems, except: [ :new, :create, :destroy ] do
+    resources :server_groups
+    resources :database_groups
+    resources :cache_groups
+    resources :databases
+    resources :caches
+    resources :key_pairs
   end
 
-  resources :eco_systems, except: [ :new, :create, :destroy ]
-
-  resources :applications, except: [ :new, :create, :destroy ]
+  resources :applications, except: [ :new, :create, :destroy ] do
+    resources :servers, except: [ :new, :edit, :update ] do
+      member do
+        post :build
+        post :bootstrap
+        post :provision
+      end
+    end
+  end
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   # The priority is based upon order of creation: first created -> highest priority.

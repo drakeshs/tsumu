@@ -81,7 +81,11 @@
         <div class="col-md-2" style="background:#EEE; padding: 4px;">
           <ul class="list-unstyled">
             <li>
-              <button type="button" class="btn btn-success m-r-5 m-b-5">Deploy</button>
+              <%= link_to "New Server", application_servers_path(app), method: :post, class: "btn btn-success m-r-5 m-b-5"  %>
+            </li>
+
+            <li>
+              <%= link_to "Deploy", "#" , method: :post, class: "btn btn-success m-r-5 m-b-5"  %>
             </li>
             <li>
               Last deploy: 2014-07-25

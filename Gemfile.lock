@@ -328,6 +328,7 @@ DEPENDENCIES
   fog
   jbuilder (~> 2.0)
   jquery-rails
+  jquery-ui-rails
   knife-ec2
   knife-solo
   knife-solo_data_bag

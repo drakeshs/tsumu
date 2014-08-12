@@ -5,6 +5,7 @@ class Server
   field :ip, type: String
   field :private_ip_address, type: String
   field :dns, type: String
+  field :groups_name, type: Array
 
   belongs_to :application, inverse_of: :servers
 
@@ -15,7 +16,10 @@ class Server
     list do
       field :eco_system_name
       field :application
+      field :state
       field :ip
+      field :private_ip_address
+      field :groups_name
     end
 
     show do
@@ -33,6 +37,7 @@ class Server
 
     edit do
       field :application
+      field :groups_name
       # field :ip
       # field :private_ip_address
       # field :dns
@@ -63,6 +68,10 @@ class Server
       server.box.bootstrap
     end
 
+  end
+
+  def provision!
+    box.bootstrap
   end
 
   def provider

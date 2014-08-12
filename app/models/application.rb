@@ -4,7 +4,6 @@ class Application
   has_many :servers, dependent: :delete, autosave: true,  inverse_of: :application
   has_many :cdns, dependent: :delete, autosave: true,  inverse_of: :application
   has_many :load_balancers, dependent: :delete, autosave: true,  inverse_of: :application
-  has_many :server_groups, dependent: :delete, autosave: true,  inverse_of: :application
 
   # has_many :databases, dependent: :delete, autosave: true,  inverse_of: :application
   # has_many :caches, dependent: :delete, autosave: true,  inverse_of: :application
@@ -42,6 +41,14 @@ class Application
 
   def safe_flavor
     self.flavor.nil? ? eco_system.flavor : self.flavor
+  end
+
+  def clone
+    system "cd #{Rails.root.join("workspace")} && git clone #{github} #{name}"
+  end
+
+  def deploy
+    system "cd #{Rails.root.join("workspace", name)} && bundle install && cap #{eco_system.rails_environment} deploy"
   end
 
 end
