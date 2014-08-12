@@ -34,7 +34,8 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-set :rbenv_type, :user # or :system, depends on your rbenv setup
+set :rbenv_path, "/opt/rbenv"
+set :rbenv_type, :system # or :system, depends on your rbenv setup
 set :rbenv_ruby, '2.1.1'
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
 set :rbenv_map_bins, %w{rake gem bundle ruby rails}
@@ -63,7 +64,7 @@ set :puma_workers, 5
 set :puma_worker_timeout, nil
 set :puma_init_active_record, false
 set :puma_preload_app, true
-set :puma_bind, %w(tcp://0.0.0.0:9292 unix:///tmp/brain-puma.sock)
+set :puma_bind, %w(tcp://0.0.0.0:9292 unix:///tmp/application.socket)
 
 namespace :deploy do
 

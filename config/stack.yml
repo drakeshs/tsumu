@@ -41,11 +41,17 @@ applications:
     name: brain
     github: git@github.com:josetonyp/tsumu.git
     eco_systems: ["deploy"]
+    flavor: t1.micro
+    image_id: "ami-00894c68"
     # redis: ["brain"]
+  -
+    name: integration
+    github:
+    eco_systems: ["deploy"]
     flavor: t1.micro
     image_id: "ami-00894c68"
   -
-    name: integration
+    name: dashboard
     github:
     eco_systems: ["deploy"]
     flavor: t1.micro
@@ -56,7 +62,7 @@ applications:
     eco_systems: ["development" , "qa" , "staging" , "production"]
     flavor: t1.micro
     image_id: "ami-00894c68"
-    # database: [ "stallone "]
+    # database: [ "stallone"]
     # redis: ["stallone"]
   -
     name: ottweb

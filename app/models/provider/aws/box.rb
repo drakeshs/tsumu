@@ -18,6 +18,10 @@ module Provider
       end
 
       def destroy
+        unless @record.private_ip_address.nil?
+          system "knife node delete ip-#{@record.private_ip_address.gsub(".","-")}.ec2.internal -y"
+          system "knife client delete ip-#{@record.private_ip_address.gsub(".","-")}.ec2.internal -y"
+        end
         get.destroy
       end
 

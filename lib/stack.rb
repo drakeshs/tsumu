@@ -116,7 +116,12 @@ module Stack
     private
 
     def get_provider(strategy = :aws)
-      keys = YAML::load_file(PROJECT_ROOT.join("config/#{strategy}.yml"))[@environment.name]
+      base =  if TEST
+                PROJECT_ROOT.join("spec")
+              else
+                PROJECT_ROOT
+              end
+      keys = YAML::load_file(base.join("config/#{strategy}.yml"))
       keys = Hash[keys.map{ |k, v| ["aws_#{k.to_sym}", v] }]
       @provider = OpenStruct.new({
           compute: Fog::Compute.new( { :provider => strategy.to_s.upcase }.merge( keys )),
