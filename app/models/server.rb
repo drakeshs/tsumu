@@ -68,13 +68,10 @@ class Server
       server.build_box
     end
 
-    after_transition :on => :bootstraping do |server, transition|
-      server.bootstrap_job
-    end
-
   end
 
   def bootstrap_job
+    p "bootstraping server #{name}"
     box.bootstrap
     bootstrap_ended!
   end

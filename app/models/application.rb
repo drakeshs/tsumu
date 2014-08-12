@@ -25,6 +25,7 @@ class Application
       field :image_id, :string
       field :flavor, :string
       field :server_roles, :string
+      field :eco_system
     end
     list do
       field :eco_system

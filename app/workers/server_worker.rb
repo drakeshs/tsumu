@@ -7,7 +7,9 @@ class ServerWorker
       when "build"
         Server.find(server_id).build!
       when "bootstrap"
-        Server.find(server_id).bootstrap!
+        server = Server.find(server_id)
+        server.bootstrap!
+        server.bootstrap_job
       when "provision"
         Server.find(server_id).provision!
       when "destroy"

@@ -48,11 +48,11 @@ applications:
     name: integration
     github:
     eco_systems: ["deploy"]
-    flavor: t1.micro
+    flavor: m3.medium
     image_id: "ami-00894c68"
   -
     name: dashboard
-    github:
+    github: git@github.com:Qwinix/dish_dashboard.git
     eco_systems: ["deploy"]
     flavor: t1.micro
     image_id: "ami-00894c68"
