@@ -62,6 +62,8 @@ data_bags/users/*
 
 data
 log/*.log
+log/bootstrap_*.log
+dump*
 log/pids
 tmp
 workspace
