@@ -13,7 +13,8 @@ set :rails_env, 'staging'
 
 server '54.164.3.140', user: 'deploy', roles: %w{web app}
 
-
+after 'deploy:publishing', "puma:restart"
+after 'deploy:publishing', "puma:workers:count"
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a
