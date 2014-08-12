@@ -67,3 +67,5 @@ dump*
 log/pids
 tmp
 workspace
+config/database.yml
+config/mongoid.yml
