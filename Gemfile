@@ -53,6 +53,7 @@ end
 group :development do
   gem 'puma'
   gem 'capistrano-rails'
+  gem 'capistrano3-puma'
 end
 
 gem "chef"
