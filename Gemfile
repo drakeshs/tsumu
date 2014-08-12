@@ -39,6 +39,7 @@ gem 'rails_admin_flatly_theme', :git => 'git://github.com/konjoot/rails_admin_fl
 gem 'state_machine'
 
 gem 'sidekiq'
+gem 'puma'
 
 
 group :development, :test do
@@ -51,7 +52,6 @@ group :development, :test do
 end
 
 group :development do
-  gem 'puma'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
