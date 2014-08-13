@@ -6,6 +6,7 @@ class Server
   field :private_ip_address, type: String
   field :dns, type: String
   field :groups_name, type: Array
+  field :role, type: String
 
   belongs_to :application, inverse_of: :servers
 
@@ -38,6 +39,7 @@ class Server
     edit do
       field :application
       field :groups_name
+      field :role, :string
       # field :ip
       # field :private_ip_address
       # field :dns
@@ -82,6 +84,10 @@ class Server
 
   def provider
     eco_system.warehouse.compute
+  end
+
+  def bootstrap_role
+    role.present? ? role : application.name
   end
 
 

@@ -1,0 +1,3 @@
+class MongoServer < Server
+
+end

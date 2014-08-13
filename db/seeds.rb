@@ -13,6 +13,7 @@ stack["eco_systems"].each do |eco_system|
   es = EcoSystem.create( eco_system )
   KeyPair.create( eco_system: es )
 end
+EcoSystem.groups
 stack["databases"].each do |db|
   db.delete("eco_systems").each do |es|
     Database.create( db.merge({ eco_system: EcoSystem.where(name:es).first }) )
@@ -29,3 +30,6 @@ stack["applications"].each do |app|
     Server.create( application: record, groups_name: record.eco_system.server_groups.map(&:box_id) )
   end
 end
+
+# only for integration app in deploy
+# MongoServer.create( application: a, groups_name: [ a.eco_system.database_groups.last.box_id] )

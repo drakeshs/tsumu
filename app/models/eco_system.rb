@@ -110,12 +110,19 @@ class EcoSystem
         name: "redis_canonical_#{eco_system.name}",
         ports: [6379]
         )
+      DatabaseGroup.create(
+        eco_system: eco_system,
+        name: "mongodb_#{eco_system.name}",
+        ports: [22,27017]
+        )
     end
-    EcoSystem.all.map do |es|
+  end
+
+  def self.build_groups
+    all.map do |es|
       es.server_groups.map(&:build!)
       es.database_groups.map(&:build!)
       es.cache_groups.map(&:build!)
     end
   end
-
 end
