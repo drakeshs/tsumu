@@ -14,8 +14,7 @@ config.assets.precompile << Proc.new { |path|
   if path =~ /\.(css|js)\z/
     full_path = Rails.application.assets.resolve(path).to_path
     asset_paths = %w( app/assets vendor/assets/components lib/assets)
-    if ((asset_paths.any? {|ap| full_path.include? ap})
-         && !path.starts_with?('_'))
+    if ((asset_paths.any? {|ap| full_path.include? ap}) && !path.starts_with?('_'))
       puts "\tIncluding: " + full_path
       true
     else
