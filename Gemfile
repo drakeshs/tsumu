@@ -49,6 +49,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-doc'
   gem 'spring'
+  gem 'ci_reporter_rspec'
 end
 
 group :development do
@@ -57,10 +58,11 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano3-puma'
   gem 'capistrano-sidekiq'
+  gem 'chef'
+  gem 'knife-solo'
+  gem 'knife-vagrant2'
+  gem 'knife-ec2'
+  gem 'knife-solo_data_bag'
 end
 
-gem "chef"
-gem "knife-solo"
-gem "knife-vagrant2"
-gem "knife-ec2"
-gem "knife-solo_data_bag"
+

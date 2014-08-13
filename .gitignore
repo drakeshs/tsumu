@@ -69,3 +69,7 @@ tmp
 workspace
 config/database.yml
 config/mongoid.yml
+
+public/assets
+
+spec/reports
