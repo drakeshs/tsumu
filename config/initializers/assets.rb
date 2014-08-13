@@ -10,7 +10,7 @@ Rails.application.config.assets.version = '1.0'
 # This block includes all js/css files, including gems,
 # under: app/assets, vendor/assets, lib/assets
 # and excluding partial files (e.g. "_file.sass")
-config.assets.precompile << Proc.new { |path|
+Rails.application.config.assets.precompile << Proc.new { |path|
   if path =~ /\.(css|js)\z/
     full_path = Rails.application.assets.resolve(path).to_path
     asset_paths = %w( app/assets vendor/assets/components lib/assets)
