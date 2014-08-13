@@ -50,14 +50,14 @@ group :development, :test do
   gem 'pry-doc'
   gem 'spring'
   gem 'ci_reporter_rspec'
-end
-
-group :development do
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
   gem 'capistrano3-puma'
   gem 'capistrano-sidekiq'
+end
+
+group :development do
   gem 'chef'
   gem 'knife-solo'
   gem 'knife-vagrant2'
