@@ -55,10 +55,10 @@ set :puma_state, "#{shared_path}/tmp/pids/puma.state"
 set :puma_pid, "#{shared_path}/tmp/pids/puma.pid"
 set :puma_bind, "unix://#{shared_path}/tmp/sockets/puma.sock"    #accept array for multi-bind
 set :puma_conf, "#{shared_path}/puma.rb"
-set :puma_access_log, "#{shared_path}/log/puma_error.log"
-set :puma_error_log, "#{shared_path}/log/puma_access.log"
+set :puma_access_log, "#{shared_path}/log/puma_access.log"
+set :puma_error_log, "#{shared_path}/log/puma_error.log"
 set :puma_role, :app
-set :puma_env, fetch(:rack_env, fetch(:rails_env, 'production'))
+set :puma_env, fetch(:rack_env, fetch(:rails_env, fetch(:stage)))
 set :puma_threads, [0, 16]
 set :puma_workers, 5
 set :puma_worker_timeout, nil
@@ -66,25 +66,22 @@ set :puma_init_active_record, false
 set :puma_preload_app, true
 set :puma_bind, %w(tcp://0.0.0.0:9292 unix:///tmp/application.socket)
 
-namespace :deploy do
 
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      # Your restart mechanism here, for example:
-      # execute :touch, release_path.join('tmp/restart.txt')
-    end
-  end
 
-  after :publishing, :restart
+set :sidekiq_default_hooks,  true
+set :sidekiq_pid,  File.join(shared_path, 'tmp', 'pids', 'sidekiq.pid')
+set :sidekiq_env,  fetch(:rack_env, fetch(:rails_env, fetch(:stage)))
+set :sidekiq_log,  File.join(shared_path, 'log', 'sidekiq.log')
+set :sidekiq_timeout,  10
+set :sidekiq_role,  :app
+set :sidekiq_processes,  1
+set :sidekiq_concurrency, 6
+# set :sidekiq_options,  nil
+# set :sidekiq_require, nil
+# set :sidekiq_tag, nil
+# set :sidekiq_config, nil
+# set :sidekiq_queue, nil
 
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
-    end
-  end
 
-end
+after 'deploy:publishing', "puma:restart"
+after 'deploy:publishing', "puma:workers:count"

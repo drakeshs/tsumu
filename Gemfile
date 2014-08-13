@@ -56,6 +56,7 @@ group :development do
   gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
   gem 'capistrano3-puma'
+  gem 'capistrano-sidekiq'
 end
 
 gem "chef"

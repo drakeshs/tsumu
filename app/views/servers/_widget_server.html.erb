@@ -5,7 +5,7 @@
       <h4><%= server.name %></h4>
       <p><%= server.state %></p>
       <% if server.ip.present? %>
-        <p><%= server.ip %></p>
+        <p><%= link_to( server.ip, "http://#{server.ip}", target: "_blank") %></p>
       <% end %>
       <% if server.private_ip_address.present? %>
         <p><%= server.private_ip_address %></p>
