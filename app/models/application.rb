@@ -1,6 +1,6 @@
 class Application
   include Mongoid::Document
-  belongs_to :eco_system
+  belongs_to :eco_system, inverse_of: :applications
   has_many :servers, dependent: :delete, autosave: true,  inverse_of: :application
   has_many :cdns, dependent: :delete, autosave: true,  inverse_of: :application
   has_many :load_balancers, dependent: :delete, autosave: true,  inverse_of: :application
@@ -28,9 +28,10 @@ class Application
       field :eco_system
     end
     list do
-      field :eco_system
       field :name
-      field :servers
+      field :eco_system
+      field :flavor
+      field :image_id
     end
 
   end
