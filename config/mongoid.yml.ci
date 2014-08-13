@@ -1,0 +1,12 @@
+test:
+  sessions:
+    default:
+      database: tsumu_test
+      hosts:
+        - 54.85.38.96:27017
+      options:
+        read: primary
+        # In the test environment we lower the retries and retry interval to
+        # low amounts for fast failures.
+        max_retries: 1
+        retry_interval: 0
