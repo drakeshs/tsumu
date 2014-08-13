@@ -10,9 +10,9 @@ class Database
   field :port, type: String
   field :multi_az, type: Boolean, default: false
   field :publicly_accessible, type: Boolean, default: false
+  field :database_groups_name, type: Array
 
   belongs_to :eco_system, inverse_of: :caches
-  has_many :database_groups, inverse_of: :database
 
   before_destroy :destroy_box
 

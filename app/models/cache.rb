@@ -6,6 +6,7 @@ class Cache
   field :engine, type: String
   field :nodes, type: Integer
   field :port, type: String
+  field :cache_groups_name, type: Array
 
   belongs_to :eco_system, inverse_of: :caches
 
