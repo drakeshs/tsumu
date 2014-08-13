@@ -40,6 +40,7 @@ gem 'state_machine'
 
 gem 'sidekiq'
 gem 'puma'
+gem 'ci_reporter_rspec'
 
 
 group :development, :test do
@@ -49,7 +50,6 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-doc'
   gem 'spring'
-  gem 'ci_reporter_rspec'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
