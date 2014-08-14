@@ -1,5 +1,6 @@
 class DatabasesController < ApplicationController
-  before_action :set_database, only: [:show, :edit, :update, :destroy]
+  before_action :get_parent
+  before_action :set_database, only: [:show, :edit, :update, :destroy, :build]
 
   # GET /databases
   # GET /databases.json
@@ -12,51 +13,31 @@ class DatabasesController < ApplicationController
   def show
   end
 
-  # GET /databases/new
-  def new
-    @database = Database.new
-  end
-
-  # GET /databases/1/edit
-  def edit
-  end
-
   # POST /databases
   # POST /databases.json
   def create
-    @database = Database.new(database_params)
+    @parent.factory.create(:database)
 
     respond_to do |format|
-      if @database.save
-        format.html { redirect_to @database, notice: 'Database was successfully created.' }
-        format.json { render :show, status: :created, location: @database }
-      else
-        format.html { render :new }
-        format.json { render json: @database.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /databases/1
-  # PATCH/PUT /databases/1.json
-  def update
-    respond_to do |format|
-      if @database.update(database_params)
-        format.html { redirect_to @database, notice: 'Database was successfully updated.' }
-        format.json { render :show, status: :ok, location: @database }
-      else
-        format.html { render :edit }
-        format.json { render json: @database.errors, status: :unprocessable_entity }
-      end
+      format.html { redirect_to @parent, notice: 'Database was successfully created.' }
+      format.json { render :show, status: :created, location: @parent }
     end
   end
 
   # DELETE /databases/1
   # DELETE /databases/1.json
   def destroy
-    @database.destroy
+    DatabaseWorker.perform_async(@database.id.to_s, "destroy")
     respond_to do |format|
-      format.html { redirect_to databases_url, notice: 'Database was successfully destroyed.' }
+      format.html { redirect_to @parent, notice: 'Database was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  def build
+    DatabaseWorker.perform_async(@database.id.to_s, "build")
+    respond_to do |format|
+      format.html { redirect_to @parent }
       format.json { head :no_content }
     end
   end
@@ -70,5 +51,12 @@ class DatabasesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def database_params
       params.require(:database).permit(:name, :ip)
+    end
+
+    def get_parent
+      parent_klasses = %w[eco_system]
+      if klass = parent_klasses.detect { |pk| params[:"#{pk}_id"].present? }
+        @parent = klass.camelize.constantize.find params[:"#{klass}_id"]
+      end
     end
 end

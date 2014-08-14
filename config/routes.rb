@@ -10,8 +10,16 @@ Rails.application.routes.draw do
     resources :server_groups
     resources :database_groups
     resources :cache_groups
-    resources :databases
-    resources :caches
+    resources :databases, except: [ :new, :edit ] do
+      member do
+        post :build
+      end
+    end
+    resources :caches, except: [ :new, :edit ] do
+      member do
+        post :build
+      end
+    end
     resources :key_pairs
   end
 

@@ -16,12 +16,14 @@ end
 EcoSystem.groups
 stack["databases"].each do |db|
   db.delete("eco_systems").each do |es|
-    Database.create( db.merge({ eco_system: EcoSystem.where(name:es).first }) )
+    d_eco_system = EcoSystem.where(name:es).first
+    Database.create( db.merge({ name: "#{d_eco_system.name}-#{es["name"]}", database_name: "#{d_eco_system.name}-#{es["name"]}", eco_system: d_eco_system  }) )
   end
 end
 stack["caches"].each do |cache|
   cache.delete("eco_systems").each do |es|
-    Cache.create( cache.merge({ eco_system: EcoSystem.where(name:es).first }) )
+    d_eco_system = EcoSystem.where(name:es).first
+    Cache.create( cache.merge({ name: "#{d_eco_system.name}-#{es["name"]}", database_name: "#{d_eco_system.name}-#{es["name"]}", eco_system: d_eco_system  }) )
   end
 end
 stack["applications"].each do |app|

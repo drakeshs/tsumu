@@ -14,7 +14,7 @@ module Provider
       end
 
       def exists?
-        !get.nil?
+        get.present?
       end
 
       def destroy
@@ -23,9 +23,13 @@ module Provider
 
       def run_up
         unless exists?
-          server = @provider.servers.new({
+          unless group
+            create_group
+            authorize_group
+          end
+          server = @provider.servers.create({
             id: @record.name,
-            db_name: @record.application.name,
+            db_name: @record.database_name,
             allocated_storage: @record.allocated_storage,
             flavor_id: @record.flavor_id,
             engine: @record.engine,
@@ -36,12 +40,26 @@ module Provider
             publicly_accessible: @record.publicly_accessible,
             # security_group_names: @record.groups
           })
-          binding.pry
           server.wait_for { sleep(1); ready? }
           server
+        else
+          get
         end
       end
 
+      def group
+        @provider.security_groups.get( "#{@record.name}_group" )
+      end
+
+      def create_group
+        unless group
+          @provider.security_groups.create( id: "#{@record.name}_group", description: "#{@record.name}_group" )
+        end
+      end
+
+      def authorize_group
+        group.authorize_ec2_security_group( @record.eco_system.cache_groups.first.name )
+      end
 
     end
   end

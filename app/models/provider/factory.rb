@@ -17,6 +17,8 @@ module Provider
           "ServerGroupBox"
         when CacheGroup
           "ServerGroupBox"
+        when Cache
+          "CacheBox"
         end
 
         Object.const_get("::Provider::#{strategy.downcase.titlecase}::#{class_name}").new(record, provider)

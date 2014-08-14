@@ -5,6 +5,7 @@ class Database
   field :allocated_storage, type: Integer,  default: 5
   field :flavor_id, type: String
   field :engine, type: String, default: "mysql"
+  field :database_name, type: String
   field :master_username, type: String
   field :master_user_password, type: String
   field :port, type: String
@@ -19,17 +20,21 @@ class Database
   state_machine :state, :initial => :creating do
 
     event :build do
-      transition :creating => :ran_up
+      transition :creating => :building
+    end
+
+    event :built do
+      transition :building => :ran_up
     end
 
     event :verify do
       transition :ran_up => :verified
     end
+  end
 
-    before_transition :creating => :ran_up do |server, transition|
-      server.build_box
-    end
-
+  def build_job
+    build_box
+    built!
   end
 
   def provider

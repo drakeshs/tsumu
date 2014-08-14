@@ -61,45 +61,54 @@
 <!-- end col-3 -->
 </div>
 
-<% @eco_system.applications.each do |app| %>
 
-<div class="panel panel-inverse">
-    <div class="panel-heading">
-        <div class="panel-heading-btn">
-            <a href="javascript:;" class="btn btn-xs btn-icon btn-circle btn-success" data-click="panel-reload"><i class="fa fa-repeat"></i></a>
+<% cache_bar = capture do %>
+   <div class="col-md-2" style="background:#EEE; padding: 4px;">
+       <ul class="list-unstyled">
+         <li>
+           <%= link_to "New Cache", eco_system_caches_path(@eco_system), method: :post, class: "btn btn-success m-r-5 m-b-5"  %>
+         </li>
 
-        </div>
-        <h4 class="panel-title"><%= app.name.capitalize %>  << <%= app.id if Rails.env.development?  %>>> </h4>
+       </ul>
     </div>
-    <div class="panel-body">
-        <p>Servers</p>
-        <div class="col-md-10">
-          <% app.servers.each do |server| %>
-            <%= render partial: 'servers/widget_server', locals: { server: server } %>
-          <% end %>
-        </div>
-        <div class="col-md-2" style="background:#EEE; padding: 4px;">
-          <ul class="list-unstyled">
-            <li>
-              <%= link_to "New Server", application_servers_path(app), method: :post, class: "btn btn-success m-r-5 m-b-5"  %>
-            </li>
-
-            <li>
-              <%= link_to "Deploy", "#" , method: :post, class: "btn btn-success m-r-5 m-b-5"  %>
-            </li>
-            <li>
-              Last deploy: 2014-07-25
-            </li>
-            <hr/>
-            <li>
-              Last Commit: 2014-08-7
-              User: Someone
-              Code: 981261ih2rho71fñlnk
-            </li>
-          </ul>
-
-        </div>
-    </div>
-</div>
-
 <% end %>
+<%= render partial: "commons/application_big_panel", locals: {
+  title: "Caches",
+  panel_name: "Instances",
+  servers: @eco_system.caches,
+  action_bar: cache_bar }  %>
+
+<% database_bar = capture do %>
+   <div class="col-md-2" style="background:#EEE; padding: 4px;">
+       <ul class="list-unstyled">
+         <li>
+           <%= link_to "New Database", eco_system_databases_path(@eco_system), method: :post, class: "btn btn-success m-r-5 m-b-5"  %>
+         </li>
+
+       </ul>
+    </div>
+<% end %>
+<%= render partial: "commons/application_big_panel", locals: {
+  title: "Databases",
+  panel_name: "Instances",
+  servers: @eco_system.databases.each,
+  action_bar: database_bar }  %>
+
+<% @eco_system.applications.each do |app| %>
+  <% server_bar = capture do %>
+     <div class="col-md-2" style="background:#EEE; padding: 4px;">
+         <ul class="list-unstyled">
+           <li>
+             <%= link_to "New Server", application_servers_path(app), method: :post, class: "btn btn-success m-r-5 m-b-5"  %>
+           </li>
+
+         </ul>
+      </div>
+  <% end %>
+  <%= render partial: "commons/application_big_panel", locals: {
+    title: "#{app.name.capitalize} << #{app.id if Rails.env.development?} >>",
+    panel_name: "Servers",
+    servers: app.servers,
+    action_bar: server_bar }  %>
+<% end %>
+

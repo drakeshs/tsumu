@@ -68,6 +68,13 @@ class EcoSystem
     end
   end
 
+
+  def factory
+    @factory ||= EcoSystem::Components::Factory.new(self)
+  end
+
+
+
   def self.build_subnets
     all.each_with_index do |eco_system, index|
       Subnet.create(

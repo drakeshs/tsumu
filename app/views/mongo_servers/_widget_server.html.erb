@@ -12,14 +12,14 @@
       <% end %>
       <p>
       <%= if ["creating"].include?(server.state)
-          link_to "Build", build_application_server_path(server.application,server), method: :post, class: "btn btn-white btn-xs"
+          link_to "Build", build_application_server_path(server.application,server), method: :post, class: "btn btn-white btn-xs", target: "_blank"
         elsif ["ran_up"].include?(server.state)
-          link_to "Bootstrap", bootstrap_application_server_path(server.application,server), method: :post, class: "btn btn-white btn-xs"
+          link_to "Bootstrap", bootstrap_application_server_path(server.application,server), method: :post, class: "btn btn-white btn-xs", target: "_blank"
         elsif ["verified", "bootstraped"].include?(server.state)
-          link_to "Provision", provision_application_server_path(server.application,server), method: :post, class: "btn btn-white btn-xs"
+          link_to "Provision", provision_application_server_path(server.application,server), method: :post, class: "btn btn-white btn-xs", target: "_blank"
         end %>
       </p>
-      <p><%= link_to "Delete", application_server_path(server.application,server), method: :delete, class: "btn btn-danger btn-xs" %></p>
+      <p><%= link_to "Delete", application_server_path(server.application,server), method: :delete, class: "btn btn-danger btn-xs", target: "_blank" %></p>
     </div>
     <div class="state-link" >
       <a href="javascript:;" style="padding:0px;  ">View Detail <i class="fa fa-arrow-circle-o-right"></i></a>

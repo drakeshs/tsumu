@@ -121,14 +121,14 @@ caches:
     name: brain
     engine: redis
     node_type: cache.t1.micro
-    nodes: 1
+    total_nodes: 1
     port: 10000
     eco_systems: ["deploy"]
   -
     name: stallone
     engine: redis
     node_type: cache.t1.micro
-    nodes: 1
+    total_nodes: 1
     port: 10000
     eco_systems: ["development" , "qa" , "staging" , "production"]
 
@@ -137,3 +137,17 @@ dependencies:
     id: recurly
     type: config
     format: yml
+
+preload_config:
+    database:
+        master_username: "admin_user"
+        master_user_password: "admin_user1234"
+        port: 3306
+        engine: mysql
+        flavor_id: db.t1.micro
+    cache:
+        engine: redis
+        node_type: cache.t1.micro
+        total_nodes: 1
+        port: 10000
+

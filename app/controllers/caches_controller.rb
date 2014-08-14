@@ -1,5 +1,6 @@
 class CachesController < ApplicationController
-  before_action :set_cach, only: [:show, :edit, :update, :destroy]
+  before_action :get_parent
+  before_action :set_cach, only: [:show, :edit, :update, :destroy, :build]
 
   # GET /caches
   # GET /caches.json
@@ -12,51 +13,33 @@ class CachesController < ApplicationController
   def show
   end
 
-  # GET /caches/new
-  def new
-    @cach = Cache.new
-  end
-
-  # GET /caches/1/edit
-  def edit
-  end
-
   # POST /caches
   # POST /caches.json
   def create
-    @cach = Cache.new(cach_params)
+
+    cache = @parent.factory.create(:cache)
 
     respond_to do |format|
-      if @cach.save
-        format.html { redirect_to @cach, notice: 'Cache was successfully created.' }
-        format.json { render :show, status: :created, location: @cach }
-      else
-        format.html { render :new }
-        format.json { render json: @cach.errors, status: :unprocessable_entity }
-      end
+      format.html { redirect_to @parent, notice: 'Cache was successfully created.' }
+      format.json { render :show, status: :created, location: cache }
     end
-  end
 
-  # PATCH/PUT /caches/1
-  # PATCH/PUT /caches/1.json
-  def update
-    respond_to do |format|
-      if @cach.update(cach_params)
-        format.html { redirect_to @cach, notice: 'Cache was successfully updated.' }
-        format.json { render :show, status: :ok, location: @cach }
-      else
-        format.html { render :edit }
-        format.json { render json: @cach.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # DELETE /caches/1
   # DELETE /caches/1.json
   def destroy
-    @cach.destroy
+    CacheWorker.perform_async(@cach.id.to_s, "destroy")
     respond_to do |format|
-      format.html { redirect_to caches_url, notice: 'Cache was successfully destroyed.' }
+      format.html { redirect_to @parent, notice: 'Cache was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  def build
+    CacheWorker.perform_async(@cach.id.to_s, "build")
+    respond_to do |format|
+      format.html { redirect_to @parent }
       format.json { head :no_content }
     end
   end
@@ -70,5 +53,12 @@ class CachesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def cach_params
       params.require(:cach).permit(:name, :ip)
+    end
+
+    def get_parent
+      parent_klasses = %w[eco_system]
+      if klass = parent_klasses.detect { |pk| params[:"#{pk}_id"].present? }
+        @parent = klass.camelize.constantize.find params[:"#{klass}_id"]
+      end
     end
 end

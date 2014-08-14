@@ -1,4 +1,5 @@
 class ServersController < ApplicationController
+  before_action :get_parent
   before_action :set_server, only: [:show, :edit, :update, :destroy, :build, :bootstrap, :provision]
 
   # GET /servers
@@ -24,28 +25,14 @@ class ServersController < ApplicationController
   # POST /servers
   # POST /servers.json
   def create
-    @server = Server.new(application: application, groups_name: application.eco_system.server_groups.map(&:box_id) )
+    @server = Server.new(application: @parent, groups_name: @parent.eco_system.server_groups.map(&:box_id) )
 
     respond_to do |format|
       if @server.save
-        format.html { redirect_to application.eco_system, notice: 'Server was successfully created.' }
+        format.html { redirect_to @parent.eco_system, notice: 'Server was successfully created.' }
         format.json { render :show, status: :created, location: @server }
       else
         format.html { render :new }
-        format.json { render json: @server.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /servers/1
-  # PATCH/PUT /servers/1.json
-  def update
-    respond_to do |format|
-      if @server.update(server_params)
-        format.html { redirect_to @server, notice: 'Server was successfully updated.' }
-        format.json { render :show, status: :ok, location: @server }
-      else
-        format.html { render :edit }
         format.json { render json: @server.errors, status: :unprocessable_entity }
       end
     end
@@ -56,7 +43,7 @@ class ServersController < ApplicationController
   def destroy
     ServerWorker.perform_async(@server.id.to_s, "destroy")
     respond_to do |format|
-      format.html { render text: "ok" }
+      format.html { redirect_to @parent.eco_system }
       format.json { head :no_content }
     end
   end
@@ -64,17 +51,26 @@ class ServersController < ApplicationController
 
   def build
     ServerWorker.perform_async(@server.id.to_s, "build")
-    render text: "ok"
+    respond_to do |format|
+      format.html { redirect_to @parent.eco_system }
+      format.json { head :no_content }
+    end
   end
 
   def bootstrap
     ServerWorker.perform_async(@server.id.to_s, "bootstrap")
-    render text: "ok"
+    respond_to do |format|
+      format.html { redirect_to @parent.eco_system }
+      format.json { head :no_content }
+    end
   end
 
   def provision
     ServerWorker.perform_async(@server.id.to_s, "provision")
-    render text: "ok"
+    respond_to do |format|
+      format.html { redirect_to @parent.eco_system }
+      format.json { head :no_content }
+    end
   end
 
   private
@@ -88,7 +84,11 @@ class ServersController < ApplicationController
       params.require(:server).permit(:provider_id, :ip, :private_ip_address)
     end
 
-    def application
-      @application ||= Application.find(params[:application_id])
+    def get_parent
+      parent_klasses = %w[application]
+      if klass = parent_klasses.detect { |pk| params[:"#{pk}_id"].present? }
+        @parent = klass.camelize.constantize.find params[:"#{klass}_id"]
+      end
     end
+
 end
