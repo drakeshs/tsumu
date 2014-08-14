@@ -82,8 +82,8 @@ set :sidekiq_concurrency, 6
 # set :sidekiq_config, nil
 # set :sidekiq_queue, nil
 
-
 after 'deploy:publishing', "puma:stop"
+after 'deploy:publishing', 'sidekiq:rolling_restart'
 after 'deploy:publishing', "puma:start"
 after 'deploy:publishing', "puma:workers:count"
 

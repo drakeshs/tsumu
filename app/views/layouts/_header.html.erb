@@ -10,7 +10,7 @@
     <!-- end mobile sidebar expand / collapse button -->
     <ul class="nav navbar-nav navbar-left">
       <% EcoSystem.each do |eco_system| %>
-        <li><%= link_to eco_system.name, eco_system_path(eco_system) %></li>
+        <li class="<%= header_eco_system_class(eco_system) %>"><%= link_to eco_system.name, eco_system_path(eco_system)  %></li>
       <% end %>
     </ul>
     <!-- begin header navigation right -->
