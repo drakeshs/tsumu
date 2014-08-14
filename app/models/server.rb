@@ -40,8 +40,8 @@ class Server
       field :application
       field :groups_name
       field :role, :string
-      # field :ip
-      # field :private_ip_address
+      field :ip
+      field :private_ip_address
       # field :dns
       # field :created_at
     end
