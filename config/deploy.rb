@@ -26,7 +26,7 @@ set :deploy_to, '/var/www/application'
 set :linked_files, %w{config/mongoid.yml config/redis_sidekiq.yml}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{keys bin log log/pids tmp/pids tmp/cache tmp/sockets vendor/bundle public/uploads public/system public/assets}
+set :linked_dirs, %w{keys bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/uploads public/system public/assets}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

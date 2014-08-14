@@ -1,6 +1,6 @@
 ---
 :concurrency: 6
-:pidfile: log/pids/sidekiq.pid
+:pidfile: tmp/pids/sidekiq.pid
 :logfile: log/sidekiq.log
 qa:
   :concurrency: 6
