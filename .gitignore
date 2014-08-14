@@ -61,8 +61,7 @@ keys/id_rsa*
 data_bags/users/*
 
 data
-log/*.log
-log/bootstrap_*.log
+log
 dump*
 log/pids
 tmp
