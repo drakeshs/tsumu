@@ -69,6 +69,7 @@ tmp
 workspace
 config/database.yml
 config/mongoid.yml
+config/redis_sidekiq.yml
 
 public/assets
 

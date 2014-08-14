@@ -23,7 +23,7 @@ set :deploy_to, '/var/www/application'
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/mongoid.yml}
+set :linked_files, %w{config/mongoid.yml config/redis_sidekiq.yml}
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{bin log log/pids tmp/pids tmp/cache tmp/sockets vendor/bundle public/uploads public/system public/assets}
