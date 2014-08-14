@@ -43,13 +43,16 @@ gem 'puma'
 gem 'ci_reporter_rspec'
 
 
-group :development, :test do
-  gem 'rspec-rails'
-  gem "factory_girl_rails", "~> 4.0"
+group :development, :test, :staging do
   gem 'pry'
   gem 'pry-rails'
   gem 'pry-doc'
+end
+
+group :development, :test do
   gem 'spring'
+  gem 'rspec-rails'
+  gem "factory_girl_rails", "~> 4.0"
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
