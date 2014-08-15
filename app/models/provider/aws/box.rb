@@ -43,8 +43,9 @@ module Provider
       end
 
       def bootstrap
+        ip = Rails.env.development? ? @record.ip : @record.private_ip_address
         log = "> log/bootstrap_#{@record.name}_#{@record.application.name}_#{@record.application.eco_system.rails_environment}.log 2> log/bootstrap_#{@record.name}_#{@record.bootstrap_role}_#{@record.application.eco_system.rails_environment}_error.log"
-        system "knife bootstrap #{get.public_ip_address} -x ubuntu -i keys/#{@record.application.eco_system.key_pairs.first.name}.pem -r 'role[#{@record.bootstrap_role}]' --secret-file .chef/encrypted_data_bag_secret --sudo -E #{@record.application.eco_system.rails_environment} #{log}"
+        system "knife bootstrap #{ip} -x ubuntu -i keys/#{@record.application.eco_system.key_pairs.first.name}.pem -r 'role[#{@record.bootstrap_role}]' --secret-file .chef/encrypted_data_bag_secret --sudo -E #{@record.application.eco_system.rails_environment} #{log}"
       end
 
 
