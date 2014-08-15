@@ -43,6 +43,14 @@ gem 'puma'
 gem 'ci_reporter_rspec'
 
 
+# This are executed in all environments
+gem 'chef'
+gem 'knife-solo'
+gem 'knife-vagrant2'
+gem 'knife-ec2'
+gem 'knife-solo_data_bag'
+
+
 group :development, :test, :staging do
   gem 'pry'
   gem 'pry-rails'
@@ -60,12 +68,6 @@ group :development, :test do
   gem 'capistrano-sidekiq'
 end
 
-group :development do
-  gem 'chef'
-  gem 'knife-solo'
-  gem 'knife-vagrant2'
-  gem 'knife-ec2'
-  gem 'knife-solo_data_bag'
-end
+
 
 
