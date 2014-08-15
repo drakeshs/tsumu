@@ -39,6 +39,7 @@ gem 'rails_admin_flatly_theme', :git => 'git://github.com/konjoot/rails_admin_fl
 gem 'state_machine'
 
 gem 'sidekiq'
+gem 'sinatra'
 gem 'puma'
 gem 'ci_reporter_rspec'
 
