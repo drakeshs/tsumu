@@ -54,8 +54,7 @@ class EcoSystem
     if provider == "aws"
       init_key = { :provider => provider }
       keys = { aws_access_key_id: provider_access_id,
-               aws_secret_access_key: provider_access_key,
-               region: region }
+               aws_secret_access_key: provider_access_key }
       @provider = OpenStruct.new({
         compute: Fog::Compute.new( init_key.merge( keys )),
         database: Fog::AWS::RDS.new( keys ),
@@ -80,7 +79,7 @@ class EcoSystem
       Subnet.create(
         eco_system: eco_system,
         name: eco_system.name,
-        vpc_id: first.vpc ,
+        vpc_id: eco_system.vpc ,
         cidr_block: "172.30.#{index+2}.0/24",
         availability_zone: eco_system.region<<"a",
         map_public_ip_on_launch: Rails.env.development?,
