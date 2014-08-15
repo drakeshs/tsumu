@@ -12,6 +12,7 @@ class Cache
   embeds_many :nodes, inverse_of: :cache, class_name: "CacheNode", cascade_callbacks: true
 
   before_destroy :destroy_box
+  before_destroy :destroy_nodes
 
   state_machine :state, :initial => :creating do
 
@@ -53,4 +54,9 @@ class Cache
 
   include ServerMethods
 
+  private
+
+    def destroy_nodes
+      nodes.destroy_all
+    end
 end
